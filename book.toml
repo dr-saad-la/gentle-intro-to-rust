@@ -1,0 +1,6 @@
+[book]
+authors = ["Dr.Saad.L"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Gentle Introduction to Rust"
