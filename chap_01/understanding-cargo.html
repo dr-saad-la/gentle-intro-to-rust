@@ -161,6 +161,88 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="understanding-cargo"><a class="header" href="#understanding-cargo">Understanding Cargo</a></h1>
+<p>Cargo is Rust's build system and package manager. It handles many tasks for you, including:</p>
+<ul>
+<li>Building your code</li>
+<li>Downloading and building dependencies</li>
+<li>Running tests</li>
+<li>Generating documentation</li>
+</ul>
+<p>Let's explore the basic Cargo commands and understand how to use this powerful tool.</p>
+<h2 id="creating-a-new-project"><a class="header" href="#creating-a-new-project">Creating a New Project</a></h2>
+<p>To create a new Rust project, use the <code>cargo new</code> command:</p>
+<pre><code class="language-bash">cargo new hello_rust
+</code></pre>
+<p>This creates a new directory called <code>hello_rust</code> with the following structure:</p>
+<pre><code>hello_rust/
+├── Cargo.toml
+└── src/
+    └── main.rs
+</code></pre>
+<p>Let's look at each component:</p>
+<ul>
+<li><strong>Cargo.toml</strong>: This is the manifest file for Rust packages. It contains metadata about your package, its dependencies, and more.</li>
+<li><strong>src/main.rs</strong>: This is the source file where your Rust code lives. For executable projects, this contains the <code>main</code> function, where execution begins.</li>
+</ul>
+<h2 id="exploring-cargotoml"><a class="header" href="#exploring-cargotoml">Exploring Cargo.toml</a></h2>
+<p>Open the <code>Cargo.toml</code> file with your text editor. You'll see something like:</p>
+<pre><code class="language-toml">[package]
+name = "hello_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+</code></pre>
+<p>This file defines:</p>
+<ul>
+<li>The name of your project</li>
+<li>The current version</li>
+<li>The Rust edition you're using (2021 is the latest at the time of writing)</li>
+<li>A section for listing dependencies (currently empty)</li>
+</ul>
+<h2 id="building-and-running"><a class="header" href="#building-and-running">Building and Running</a></h2>
+<p>Cargo makes it easy to build and run your project:</p>
+<pre><code class="language-bash"># Navigate to your project directory
+cd hello_rust
+
+# Build your project
+cargo build
+
+# Run your project
+cargo run
+</code></pre>
+<p>When you run <code>cargo build</code>, Cargo compiles your program and creates an executable in the <code>target/debug</code> directory.</p>
+<p>The <code>cargo run</code> command combines building and running in one step—it builds your project (if necessary) and then runs the resulting executable.</p>
+<h2 id="release-builds"><a class="header" href="#release-builds">Release Builds</a></h2>
+<p>By default, Cargo builds your code with debugging information and without optimizations. When you're ready to create an optimized version for distribution, use:</p>
+<pre><code class="language-bash">cargo build --release
+</code></pre>
+<p>This creates an optimized executable in <code>target/release/</code>. Release builds run much faster but take longer to compile.</p>
+<h2 id="adding-dependencies"><a class="header" href="#adding-dependencies">Adding Dependencies</a></h2>
+<p>One of Cargo's most powerful features is how easily it lets you use external libraries (called "crates" in Rust).</p>
+<p>To add a dependency, edit your <code>Cargo.toml</code> file and add it under the <code>[dependencies]</code> section:</p>
+<pre><code class="language-toml">[dependencies]
+rand = "0.8.5"
+</code></pre>
+<p>This adds the <code>rand</code> crate (for random number generation) with version 0.8.5 or compatible.</p>
+<p>The next time you build your project, Cargo will automatically download and compile this dependency and any of its dependencies.</p>
+<h2 id="other-useful-commands"><a class="header" href="#other-useful-commands">Other Useful Commands</a></h2>
+<ul>
+<li><code>cargo check</code>: Quickly checks your code for errors without producing an executable</li>
+<li><code>cargo doc --open</code>: Builds documentation for your project and its dependencies and opens it in a browser</li>
+<li><code>cargo test</code>: Runs tests for your project</li>
+<li><code>cargo update</code>: Updates dependencies to the latest versions allowed by your <code>Cargo.toml</code></li>
+</ul>
+<h2 id="cargos-impact-on-workflow"><a class="header" href="#cargos-impact-on-workflow">Cargo's Impact on Workflow</a></h2>
+<p>Cargo has transformed how Rust developers work by making it trivially easy to:</p>
+<ul>
+<li>Start new projects with the correct structure</li>
+<li>Manage dependencies</li>
+<li>Build and test code</li>
+<li>Share your libraries with others</li>
+</ul>
+<p>As you continue learning Rust, you'll come to rely on Cargo for more advanced features, but these basics will take you a long way.</p>
+<p>Now that we understand Cargo, let's create our first Rust program.</p>
 
                     </main>
 

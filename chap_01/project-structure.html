@@ -161,6 +161,161 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="rust-project-structure"><a class="header" href="#rust-project-structure">Rust Project Structure</a></h1>
+<p>Understanding how Rust projects are structured is essential for organizing your code as it grows. In this section, we'll explore the standard structure of Rust projects and how it promotes maintainable code.</p>
+<h2 id="basic-structure"><a class="header" href="#basic-structure">Basic Structure</a></h2>
+<p>As we've seen, a new Rust project created with <code>cargo new</code> has this simple structure:</p>
+<pre><code>project_name/
+├── Cargo.toml       # Project configuration and dependencies
+├── src/             # Source directory
+│   └── main.rs      # Entry point for binaries
+└── target/          # Compiled output (created when you build)
+</code></pre>
+<h2 id="binary-vs-library-projects"><a class="header" href="#binary-vs-library-projects">Binary vs. Library Projects</a></h2>
+<p>Rust projects can be either a binary (an executable) or a library (code meant to be used by other projects).</p>
+<ul>
+<li>
+<p><strong>Binary project</strong>: Created with <code>cargo new project_name</code></p>
+<ul>
+<li>Has a <code>src/main.rs</code> file with a <code>main()</code> function</li>
+<li>Produces an executable</li>
+</ul>
+</li>
+<li>
+<p><strong>Library project</strong>: Created with <code>cargo new --lib project_name</code></p>
+<ul>
+<li>Has a <code>src/lib.rs</code> file instead of <code>main.rs</code></li>
+<li>Produces a library that other code can use</li>
+</ul>
+</li>
+</ul>
+<h2 id="more-complex-project-structure"><a class="header" href="#more-complex-project-structure">More Complex Project Structure</a></h2>
+<p>As your project grows, you'll likely add more files:</p>
+<pre><code>project_name/
+├── Cargo.toml
+├── Cargo.lock       # Lock file for dependencies (automatically generated)
+├── src/
+│   ├── main.rs      # Binary entry point
+│   ├── lib.rs       # Library root (if you have one)
+│   └── utils.rs     # An example module file
+├── examples/        # Example code showing how to use your library
+│   └── demo.rs
+├── tests/           # Integration tests
+│   └── integration_test.rs
+├── benches/         # Benchmarks
+│   └── benchmark.rs
+└── target/
+</code></pre>
+<h2 id="the-module-system"><a class="header" href="#the-module-system">The Module System</a></h2>
+<p>Rust uses a module system to organize code within a project. The simplest way to create a module is to create a new file:</p>
+<p>For example, to create a <code>utils</code> module:</p>
+<ol>
+<li>Create a file called <code>src/utils.rs</code></li>
+<li>In your <code>main.rs</code> or <code>lib.rs</code>, add:</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">// Tell Rust to include the utils module
+mod utils;
+
+fn main() {
+    // Use something from the utils module
+    utils::some_function();
+}</code></pre></pre>
+<p>As projects grow even larger, you might create directories for modules:</p>
+<pre><code>src/
+├── main.rs
+└── models/         # A directory for a module
+    ├── mod.rs      # The module root
+    ├── user.rs     # A submodule
+    └── product.rs  # Another submodule
+</code></pre>
+<p>Then in <code>main.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust">mod models;
+
+fn main() {
+    let user = models::user::User::new("Alice");
+    // ...
+}</code></pre></pre>
+<h2 id="cargotoml-in-detail"><a class="header" href="#cargotoml-in-detail">Cargo.toml in Detail</a></h2>
+<p>The <code>Cargo.toml</code> file configures your project. Let's look at some common sections:</p>
+<pre><code class="language-toml">[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name &lt;your.email@example.com&gt;"]
+description = "A short description of the project"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+rand = "0.8"
+
+[dev-dependencies]
+pretty_assertions = "1.0"
+
+[build-dependencies]
+cc = "1.0"
+
+[[bin]]
+name = "custom_binary_name"
+path = "src/bin/custom.rs"
+</code></pre>
+<p>Key sections include:</p>
+<ul>
+<li><code>[package]</code>: Metadata about your project</li>
+<li><code>[dependencies]</code>: External libraries your code needs</li>
+<li><code>[dev-dependencies]</code>: Dependencies only needed for tests and examples</li>
+<li><code>[build-dependencies]</code>: Dependencies used in build scripts</li>
+<li><code>[[bin]]</code>: Configuration for additional binaries in your project</li>
+</ul>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<p>Here are some best practices for structuring Rust projects:</p>
+<ol>
+<li><strong>Keep modules focused</strong>: Each module should have a single responsibility</li>
+<li><strong>Use descriptive names</strong>: Name your files and modules based on what they do</li>
+<li><strong>Follow Rust conventions</strong>: Use snake_case for files and functions, CamelCase for types</li>
+<li><strong>Organize by feature</strong>: Group related functionality together</li>
+<li><strong>Document your code</strong>: Use Rust's documentation comments (<code>///</code> or <code>//!</code>)</li>
+</ol>
+<h2 id="documentation-comments"><a class="header" href="#documentation-comments">Documentation Comments</a></h2>
+<p>Rust has special comment syntax for documentation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This is a documentation comment for the function below
+/// It supports markdown formatting
+///
+/// # Examples
+///
+/// ```
+/// let result = my_function(42);
+/// assert_eq!(result, 84);
+/// ```
+fn my_function(input: i32) -&gt; i32 {
+    input * 2
+}
+
+//! This is a module-level documentation comment
+//! It documents the module or crate that contains it
+<span class="boring">}</span></code></pre></pre>
+<p>You can generate HTML documentation with <code>cargo doc --open</code>.</p>
+<h2 id="workspace-projects"><a class="header" href="#workspace-projects">Workspace Projects</a></h2>
+<p>For very large projects, Rust supports workspaces that group multiple related packages:</p>
+<pre><code>workspace_root/
+├── Cargo.toml       # Workspace configuration
+├── package_one/     # A package in the workspace
+│   ├── Cargo.toml
+│   └── src/
+└── package_two/     # Another package
+    ├── Cargo.toml
+    └── src/
+</code></pre>
+<p>The workspace <code>Cargo.toml</code> might look like:</p>
+<pre><code class="language-toml">[workspace]
+members = [
+    "package_one",
+    "package_two",
+]
+</code></pre>
+<p>This approach helps manage large codebases by splitting them into manageable pieces while still allowing the pieces to work together seamlessly.</p>
+<p>Understanding Rust's project structure gives you the foundation to organize your code effectively as it grows from simple scripts to complex applications.</p>
 
                     </main>
 

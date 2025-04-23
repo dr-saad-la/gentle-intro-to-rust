@@ -197,11 +197,449 @@
 <p>Welcome aboard!</p>
 <p><em>Dr. Saad Laouadi</em></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<p>Welcome to the first chapter of our Rust journey! Before we can write any Rust code, we need to set up our development environment. In this chapter, we'll cover everything you need to get started with Rust programming.</p>
+<p>Learning a new programming language involves more than just understanding the syntax. It's also about getting comfortable with the tools, the ecosystem, and the workflow. By the end of this chapter, you'll have a functioning Rust development environment and you'll write your first Rust program.</p>
+<p>We'll cover:</p>
+<ul>
+<li>Installing Rust on your system</li>
+<li>Understanding Rust's package manager, Cargo</li>
+<li>Setting up a code editor or IDE for Rust development</li>
+<li>Creating and running your first Rust program</li>
+<li>Understanding the structure of a Rust project</li>
+</ul>
+<p>Let's begin by installing Rust on your system.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-rust"><a class="header" href="#installing-rust">Installing Rust</a></h1>
+<p>Rust has an excellent installation tool called <code>rustup</code> that makes it easy to install and update Rust on any operating system. Let's walk through the process.</p>
+<h2 id="using-rustup-recommended"><a class="header" href="#using-rustup-recommended">Using Rustup (Recommended)</a></h2>
+<p>Rustup is the official Rust toolchain installer. It allows you to easily install, update, and manage different versions of the Rust compiler and tools.</p>
+<h3 id="for-windows-macos-and-linux"><a class="header" href="#for-windows-macos-and-linux">For Windows, macOS, and Linux</a></h3>
+<ol>
+<li>Open your web browser and go to <a href="https://rustup.rs">https://rustup.rs</a></li>
+<li>Follow the instructions on the page, which typically involve running a single command in your terminal.</li>
+</ol>
+<p>For most Unix-like operating systems (Linux and macOS), you can run:</p>
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+<p>On Windows, download and run <code>rustup-init.exe</code> from the website.</p>
+<ol start="3">
+<li>Follow the prompts in the installer. For beginners, the default options are perfect.</li>
+<li>After installation completes, restart your terminal or run the following to update your current shell:</li>
+</ol>
+<pre><code class="language-bash">source $HOME/.cargo/env
+</code></pre>
+<h2 id="verifying-your-installation"><a class="header" href="#verifying-your-installation">Verifying Your Installation</a></h2>
+<p>To verify that Rust is correctly installed, open a new terminal window and run:</p>
+<pre><code class="language-bash">rustc --version
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>rustc 1.70.0 (90c541806 2023-05-31)
+</code></pre>
+<p>The version number may be different, but as long as the command produces output like this, Rust is installed correctly.</p>
+<p>Similarly, check that Cargo (Rust's package manager and build tool) is installed:</p>
+<pre><code class="language-bash">cargo --version
+</code></pre>
+<h2 id="what-gets-installed"><a class="header" href="#what-gets-installed">What Gets Installed</a></h2>
+<p>When you install Rust via rustup, you get several important components:</p>
+<ul>
+<li><strong>rustc</strong>: The Rust compiler</li>
+<li><strong>cargo</strong>: Rust's package manager and build system</li>
+<li><strong>rustup</strong>: The toolchain installer itself, which lets you switch between different Rust versions</li>
+<li><strong>Standard Library</strong>: Rust's rich standard library</li>
+</ul>
+<h2 id="keeping-rust-updated"><a class="header" href="#keeping-rust-updated">Keeping Rust Updated</a></h2>
+<p>One advantage of using rustup is that updating Rust is simple. Just run:</p>
+<pre><code class="language-bash">rustup update
+</code></pre>
+<p>This will update to the latest stable version of Rust.</p>
+<h2 id="installing-ide-support"><a class="header" href="#installing-ide-support">Installing IDE Support</a></h2>
+<p>Rust has excellent support in many editors and IDEs. Here are some popular options:</p>
+<h3 id="visual-studio-code"><a class="header" href="#visual-studio-code">Visual Studio Code</a></h3>
+<ol>
+<li>Install <a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
+<li>Install the "rust-analyzer" extension from the marketplace</li>
+</ol>
+<h3 id="intellij-idea--clion"><a class="header" href="#intellij-idea--clion">IntelliJ IDEA / CLion</a></h3>
+<ol>
+<li>Install <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> or <a href="https://www.jetbrains.com/clion/">CLion</a></li>
+<li>Install the "Rust" plugin from Settings/Preferences → Plugins</li>
+</ol>
+<h3 id="other-options"><a class="header" href="#other-options">Other Options</a></h3>
+<ul>
+<li><strong>Vim/Neovim</strong>: Consider using rust.vim and rust-analyzer with coc.nvim</li>
+<li><strong>Emacs</strong>: rust-mode and rust-analyzer with lsp-mode</li>
+<li><strong>Sublime Text</strong>: Install the Rust Enhanced package</li>
+</ul>
+<p>Now that you have Rust installed, let's explore Cargo, Rust's powerful package manager and build tool.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-cargo"><a class="header" href="#understanding-cargo">Understanding Cargo</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="first-rust-program"><a class="header" href="#first-rust-program">First Rust Program</a></h1>
+<p>Cargo is Rust's build system and package manager. It handles many tasks for you, including:</p>
+<ul>
+<li>Building your code</li>
+<li>Downloading and building dependencies</li>
+<li>Running tests</li>
+<li>Generating documentation</li>
+</ul>
+<p>Let's explore the basic Cargo commands and understand how to use this powerful tool.</p>
+<h2 id="creating-a-new-project"><a class="header" href="#creating-a-new-project">Creating a New Project</a></h2>
+<p>To create a new Rust project, use the <code>cargo new</code> command:</p>
+<pre><code class="language-bash">cargo new hello_rust
+</code></pre>
+<p>This creates a new directory called <code>hello_rust</code> with the following structure:</p>
+<pre><code>hello_rust/
+├── Cargo.toml
+└── src/
+    └── main.rs
+</code></pre>
+<p>Let's look at each component:</p>
+<ul>
+<li><strong>Cargo.toml</strong>: This is the manifest file for Rust packages. It contains metadata about your package, its dependencies, and more.</li>
+<li><strong>src/main.rs</strong>: This is the source file where your Rust code lives. For executable projects, this contains the <code>main</code> function, where execution begins.</li>
+</ul>
+<h2 id="exploring-cargotoml"><a class="header" href="#exploring-cargotoml">Exploring Cargo.toml</a></h2>
+<p>Open the <code>Cargo.toml</code> file with your text editor. You'll see something like:</p>
+<pre><code class="language-toml">[package]
+name = "hello_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+</code></pre>
+<p>This file defines:</p>
+<ul>
+<li>The name of your project</li>
+<li>The current version</li>
+<li>The Rust edition you're using (2021 is the latest at the time of writing)</li>
+<li>A section for listing dependencies (currently empty)</li>
+</ul>
+<h2 id="building-and-running"><a class="header" href="#building-and-running">Building and Running</a></h2>
+<p>Cargo makes it easy to build and run your project:</p>
+<pre><code class="language-bash"># Navigate to your project directory
+cd hello_rust
+
+# Build your project
+cargo build
+
+# Run your project
+cargo run
+</code></pre>
+<p>When you run <code>cargo build</code>, Cargo compiles your program and creates an executable in the <code>target/debug</code> directory.</p>
+<p>The <code>cargo run</code> command combines building and running in one step—it builds your project (if necessary) and then runs the resulting executable.</p>
+<h2 id="release-builds"><a class="header" href="#release-builds">Release Builds</a></h2>
+<p>By default, Cargo builds your code with debugging information and without optimizations. When you're ready to create an optimized version for distribution, use:</p>
+<pre><code class="language-bash">cargo build --release
+</code></pre>
+<p>This creates an optimized executable in <code>target/release/</code>. Release builds run much faster but take longer to compile.</p>
+<h2 id="adding-dependencies"><a class="header" href="#adding-dependencies">Adding Dependencies</a></h2>
+<p>One of Cargo's most powerful features is how easily it lets you use external libraries (called "crates" in Rust).</p>
+<p>To add a dependency, edit your <code>Cargo.toml</code> file and add it under the <code>[dependencies]</code> section:</p>
+<pre><code class="language-toml">[dependencies]
+rand = "0.8.5"
+</code></pre>
+<p>This adds the <code>rand</code> crate (for random number generation) with version 0.8.5 or compatible.</p>
+<p>The next time you build your project, Cargo will automatically download and compile this dependency and any of its dependencies.</p>
+<h2 id="other-useful-commands"><a class="header" href="#other-useful-commands">Other Useful Commands</a></h2>
+<ul>
+<li><code>cargo check</code>: Quickly checks your code for errors without producing an executable</li>
+<li><code>cargo doc --open</code>: Builds documentation for your project and its dependencies and opens it in a browser</li>
+<li><code>cargo test</code>: Runs tests for your project</li>
+<li><code>cargo update</code>: Updates dependencies to the latest versions allowed by your <code>Cargo.toml</code></li>
+</ul>
+<h2 id="cargos-impact-on-workflow"><a class="header" href="#cargos-impact-on-workflow">Cargo's Impact on Workflow</a></h2>
+<p>Cargo has transformed how Rust developers work by making it trivially easy to:</p>
+<ul>
+<li>Start new projects with the correct structure</li>
+<li>Manage dependencies</li>
+<li>Build and test code</li>
+<li>Share your libraries with others</li>
+</ul>
+<p>As you continue learning Rust, you'll come to rely on Cargo for more advanced features, but these basics will take you a long way.</p>
+<p>Now that we understand Cargo, let's create our first Rust program.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="your-first-rust-program"><a class="header" href="#your-first-rust-program">Your First Rust Program</a></h1>
+<p>Let's write our first Rust program: the classic "Hello, World!" example. This will give us a chance to see a complete Rust program and understand its basic structure.</p>
+<h2 id="creating-the-project"><a class="header" href="#creating-the-project">Creating the Project</a></h2>
+<p>We'll use Cargo to create a new project:</p>
+<pre><code class="language-bash">cargo new hello_world
+cd hello_world
+</code></pre>
+<h2 id="understanding-the-generated-code"><a class="header" href="#understanding-the-generated-code">Understanding the Generated Code</a></h2>
+<p>Open the <code>src/main.rs</code> file in your editor. You'll see Cargo has already generated a simple "Hello, World!" program for you:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    println!("Hello, world!");
+}</code></pre></pre>
+<p>Let's examine this code line by line:</p>
+<ol>
+<li>
+<p><code>fn main() {</code>: This declares a function named <code>main</code>. The <code>main</code> function is special in Rust—it's the entry point of every Rust program.</p>
+</li>
+<li>
+<p><code>println!("Hello, world!");</code>: This line prints text to the console. The <code>println!</code> is a macro (that's what the <code>!</code> indicates), not a regular function. Macros are a powerful feature in Rust that we'll explore later.</p>
+</li>
+<li>
+<p><code>}</code>: This closing brace marks the end of the <code>main</code> function.</p>
+</li>
+</ol>
+<h2 id="running-the-program"><a class="header" href="#running-the-program">Running the Program</a></h2>
+<p>To run this program, use Cargo:</p>
+<pre><code class="language-bash">cargo run
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>   Compiling hello_world v0.1.0 (/path/to/hello_world)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.61s
+     Running `target/debug/hello_world`
+Hello, world!
+</code></pre>
+<p>Congratulations! You've just run your first Rust program.</p>
+<h2 id="modifying-the-program"><a class="header" href="#modifying-the-program">Modifying the Program</a></h2>
+<p>Let's make a small change to understand a bit more about Rust. Update your <code>main.rs</code> file to:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let name = "Rustacean";
+    println!("Hello, {}!", name);
+}</code></pre></pre>
+<p>Here's what we've changed:</p>
+<ol>
+<li>
+<p><code>let name = "Rustacean";</code>: We're declaring a variable named <code>name</code> and assigning it the value <code>"Rustacean"</code>. Variables in Rust are immutable (cannot be changed) by default.</p>
+</li>
+<li>
+<p><code>println!("Hello, {}!", name);</code>: We're using a placeholder <code>{}</code> in the string and passing the <code>name</code> variable to fill it.</p>
+</li>
+</ol>
+<p>Run the program again with <code>cargo run</code> and you should see:</p>
+<pre><code>Hello, Rustacean!
+</code></pre>
+<h2 id="adding-comments"><a class="header" href="#adding-comments">Adding Comments</a></h2>
+<p>Comments in Rust start with <code>//</code>. Let's add some comments to our program:</p>
+<pre><pre class="playground"><code class="language-rust">// This is the main function, the entry point of our program
+fn main() {
+    // Declare a variable to hold the name
+    let name = "Rustacean";
+    
+    // Print a greeting using the name variable
+    println!("Hello, {}!", name);
+}</code></pre></pre>
+<p>Comments are ignored by the compiler but are extremely useful for humans reading your code.</p>
+<h2 id="understanding-program-structure"><a class="header" href="#understanding-program-structure">Understanding Program Structure</a></h2>
+<p>Let's take a step back and understand the structure of our Rust project:</p>
+<ul>
+<li><code>Cargo.toml</code>: Contains metadata about our project and its dependencies</li>
+<li><code>src/main.rs</code>: Contains our source code, starting with the <code>main</code> function</li>
+<li><code>target/</code>: Directory created by Cargo to store compiled files</li>
+</ul>
+<p>This basic structure is the foundation for all Rust projects. As projects grow more complex, you'll add more files, modules, and tests, but the fundamental organization remains the same.</p>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<p>From this simple example, we've learned:</p>
+<ol>
+<li>Rust programs start execution in the <code>main</code> function</li>
+<li><code>println!</code> is a macro for printing to the console</li>
+<li>Variables are declared with <code>let</code> and are immutable by default</li>
+<li>String formatting uses <code>{}</code> as placeholder</li>
+<li>Comments start with <code>//</code></li>
+<li>Cargo makes it easy to build and run programs</li>
+</ol>
+<p>This is just the beginning of our Rust journey. Next, we'll learn about Rust's type system and basic syntax.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-project-structure"><a class="header" href="#rust-project-structure">Rust Project Structure</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>Understanding how Rust projects are structured is essential for organizing your code as it grows. In this section, we'll explore the standard structure of Rust projects and how it promotes maintainable code.</p>
+<h2 id="basic-structure"><a class="header" href="#basic-structure">Basic Structure</a></h2>
+<p>As we've seen, a new Rust project created with <code>cargo new</code> has this simple structure:</p>
+<pre><code>project_name/
+├── Cargo.toml       # Project configuration and dependencies
+├── src/             # Source directory
+│   └── main.rs      # Entry point for binaries
+└── target/          # Compiled output (created when you build)
+</code></pre>
+<h2 id="binary-vs-library-projects"><a class="header" href="#binary-vs-library-projects">Binary vs. Library Projects</a></h2>
+<p>Rust projects can be either a binary (an executable) or a library (code meant to be used by other projects).</p>
+<ul>
+<li>
+<p><strong>Binary project</strong>: Created with <code>cargo new project_name</code></p>
+<ul>
+<li>Has a <code>src/main.rs</code> file with a <code>main()</code> function</li>
+<li>Produces an executable</li>
+</ul>
+</li>
+<li>
+<p><strong>Library project</strong>: Created with <code>cargo new --lib project_name</code></p>
+<ul>
+<li>Has a <code>src/lib.rs</code> file instead of <code>main.rs</code></li>
+<li>Produces a library that other code can use</li>
+</ul>
+</li>
+</ul>
+<h2 id="more-complex-project-structure"><a class="header" href="#more-complex-project-structure">More Complex Project Structure</a></h2>
+<p>As your project grows, you'll likely add more files:</p>
+<pre><code>project_name/
+├── Cargo.toml
+├── Cargo.lock       # Lock file for dependencies (automatically generated)
+├── src/
+│   ├── main.rs      # Binary entry point
+│   ├── lib.rs       # Library root (if you have one)
+│   └── utils.rs     # An example module file
+├── examples/        # Example code showing how to use your library
+│   └── demo.rs
+├── tests/           # Integration tests
+│   └── integration_test.rs
+├── benches/         # Benchmarks
+│   └── benchmark.rs
+└── target/
+</code></pre>
+<h2 id="the-module-system"><a class="header" href="#the-module-system">The Module System</a></h2>
+<p>Rust uses a module system to organize code within a project. The simplest way to create a module is to create a new file:</p>
+<p>For example, to create a <code>utils</code> module:</p>
+<ol>
+<li>Create a file called <code>src/utils.rs</code></li>
+<li>In your <code>main.rs</code> or <code>lib.rs</code>, add:</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">// Tell Rust to include the utils module
+mod utils;
+
+fn main() {
+    // Use something from the utils module
+    utils::some_function();
+}</code></pre></pre>
+<p>As projects grow even larger, you might create directories for modules:</p>
+<pre><code>src/
+├── main.rs
+└── models/         # A directory for a module
+    ├── mod.rs      # The module root
+    ├── user.rs     # A submodule
+    └── product.rs  # Another submodule
+</code></pre>
+<p>Then in <code>main.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust">mod models;
+
+fn main() {
+    let user = models::user::User::new("Alice");
+    // ...
+}</code></pre></pre>
+<h2 id="cargotoml-in-detail"><a class="header" href="#cargotoml-in-detail">Cargo.toml in Detail</a></h2>
+<p>The <code>Cargo.toml</code> file configures your project. Let's look at some common sections:</p>
+<pre><code class="language-toml">[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name &lt;your.email@example.com&gt;"]
+description = "A short description of the project"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+rand = "0.8"
+
+[dev-dependencies]
+pretty_assertions = "1.0"
+
+[build-dependencies]
+cc = "1.0"
+
+[[bin]]
+name = "custom_binary_name"
+path = "src/bin/custom.rs"
+</code></pre>
+<p>Key sections include:</p>
+<ul>
+<li><code>[package]</code>: Metadata about your project</li>
+<li><code>[dependencies]</code>: External libraries your code needs</li>
+<li><code>[dev-dependencies]</code>: Dependencies only needed for tests and examples</li>
+<li><code>[build-dependencies]</code>: Dependencies used in build scripts</li>
+<li><code>[[bin]]</code>: Configuration for additional binaries in your project</li>
+</ul>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<p>Here are some best practices for structuring Rust projects:</p>
+<ol>
+<li><strong>Keep modules focused</strong>: Each module should have a single responsibility</li>
+<li><strong>Use descriptive names</strong>: Name your files and modules based on what they do</li>
+<li><strong>Follow Rust conventions</strong>: Use snake_case for files and functions, CamelCase for types</li>
+<li><strong>Organize by feature</strong>: Group related functionality together</li>
+<li><strong>Document your code</strong>: Use Rust's documentation comments (<code>///</code> or <code>//!</code>)</li>
+</ol>
+<h2 id="documentation-comments"><a class="header" href="#documentation-comments">Documentation Comments</a></h2>
+<p>Rust has special comment syntax for documentation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This is a documentation comment for the function below
+/// It supports markdown formatting
+///
+/// # Examples
+///
+/// ```
+/// let result = my_function(42);
+/// assert_eq!(result, 84);
+/// ```
+fn my_function(input: i32) -&gt; i32 {
+    input * 2
+}
+
+//! This is a module-level documentation comment
+//! It documents the module or crate that contains it
+<span class="boring">}</span></code></pre></pre>
+<p>You can generate HTML documentation with <code>cargo doc --open</code>.</p>
+<h2 id="workspace-projects"><a class="header" href="#workspace-projects">Workspace Projects</a></h2>
+<p>For very large projects, Rust supports workspaces that group multiple related packages:</p>
+<pre><code>workspace_root/
+├── Cargo.toml       # Workspace configuration
+├── package_one/     # A package in the workspace
+│   ├── Cargo.toml
+│   └── src/
+└── package_two/     # Another package
+    ├── Cargo.toml
+    └── src/
+</code></pre>
+<p>The workspace <code>Cargo.toml</code> might look like:</p>
+<pre><code class="language-toml">[workspace]
+members = [
+    "package_one",
+    "package_two",
+]
+</code></pre>
+<p>This approach helps manage large codebases by splitting them into manageable pieces while still allowing the pieces to work together seamlessly.</p>
+<p>Understanding Rust's project structure gives you the foundation to organize your code effectively as it grows from simple scripts to complex applications.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-1-summary"><a class="header" href="#chapter-1-summary">Chapter 1 Summary</a></h1>
+<p>Congratulations! You've completed the first chapter of your Rust journey. Let's review what we've learned:</p>
+<h2 id="key-concepts"><a class="header" href="#key-concepts">Key Concepts</a></h2>
+<ul>
+<li>
+<p><strong>Rust Installation</strong>: We installed Rust using <code>rustup</code>, the official Rust toolchain manager that makes it easy to install and update Rust.</p>
+</li>
+<li>
+<p><strong>Cargo</strong>: We explored Cargo, Rust's package manager and build system. It helps us create projects, manage dependencies, and build our code.</p>
+</li>
+<li>
+<p><strong>First Program</strong>: We wrote our first Rust program, the classic "Hello, World!", and learned about the structure of a Rust program starting with the <code>main()</code> function.</p>
+</li>
+<li>
+<p><strong>Project Structure</strong>: We examined how Rust projects are organized, from simple binary applications to more complex structures with multiple modules.</p>
+</li>
+</ul>
+<h2 id="whats-next"><a class="header" href="#whats-next">What's Next?</a></h2>
+<p>In the next chapter, we'll dive deeper into Rust's syntax and fundamental concepts. We'll learn about:</p>
+<ul>
+<li>Variables and data types</li>
+<li>Functions and control flow</li>
+<li>Basic operators</li>
+<li>Understanding how Rust handles memory differently from other languages</li>
+</ul>
+<h2 id="exercises"><a class="header" href="#exercises">Exercises</a></h2>
+<p>Before moving on, try these exercises to reinforce what you've learned:</p>
+<ol>
+<li>
+<p><strong>Modify the Hello World program</strong> to ask for the user's name and then greet them personally. (Hint: You'll need to look up how to get user input in Rust.)</p>
+</li>
+<li>
+<p><strong>Create a new Rust project</strong> that calculates and prints the sum of two numbers.</p>
+</li>
+<li>
+<p><strong>Explore Cargo commands</strong> by running <code>cargo help</code> and experimenting with commands like <code>cargo check</code> and <code>cargo doc</code>.</p>
+</li>
+<li>
+<p><strong>Add a dependency</strong> to your project by editing the <code>Cargo.toml</code> file and using the functionality provided by the dependency. (Suggestion: try the <code>colored</code> crate to add color to your console output.)</p>
+</li>
+</ol>
+<h2 id="resources-for-further-learning"><a class="header" href="#resources-for-further-learning">Resources for Further Learning</a></h2>
+<ul>
+<li><a href="https://doc.rust-lang.org/book/">The Rust Programming Language Book</a> - The official comprehensive guide to Rust</li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/">Rust By Example</a> - Learn Rust through annotated examples</li>
+<li><a href="https://doc.rust-lang.org/cargo/">Cargo Documentation</a> - Detailed information about Cargo's capabilities</li>
+</ul>
+<p>Remember, learning to program in Rust is a journey. Don't worry if some concepts aren't entirely clear yet—we'll revisit and expand on them in future chapters.</p>
 
                     </main>
 

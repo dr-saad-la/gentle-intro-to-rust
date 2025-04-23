@@ -160,7 +160,89 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="first-rust-program"><a class="header" href="#first-rust-program">First Rust Program</a></h1>
+                        <h1 id="your-first-rust-program"><a class="header" href="#your-first-rust-program">Your First Rust Program</a></h1>
+<p>Let's write our first Rust program: the classic "Hello, World!" example. This will give us a chance to see a complete Rust program and understand its basic structure.</p>
+<h2 id="creating-the-project"><a class="header" href="#creating-the-project">Creating the Project</a></h2>
+<p>We'll use Cargo to create a new project:</p>
+<pre><code class="language-bash">cargo new hello_world
+cd hello_world
+</code></pre>
+<h2 id="understanding-the-generated-code"><a class="header" href="#understanding-the-generated-code">Understanding the Generated Code</a></h2>
+<p>Open the <code>src/main.rs</code> file in your editor. You'll see Cargo has already generated a simple "Hello, World!" program for you:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    println!("Hello, world!");
+}</code></pre></pre>
+<p>Let's examine this code line by line:</p>
+<ol>
+<li>
+<p><code>fn main() {</code>: This declares a function named <code>main</code>. The <code>main</code> function is special in Rust—it's the entry point of every Rust program.</p>
+</li>
+<li>
+<p><code>println!("Hello, world!");</code>: This line prints text to the console. The <code>println!</code> is a macro (that's what the <code>!</code> indicates), not a regular function. Macros are a powerful feature in Rust that we'll explore later.</p>
+</li>
+<li>
+<p><code>}</code>: This closing brace marks the end of the <code>main</code> function.</p>
+</li>
+</ol>
+<h2 id="running-the-program"><a class="header" href="#running-the-program">Running the Program</a></h2>
+<p>To run this program, use Cargo:</p>
+<pre><code class="language-bash">cargo run
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>   Compiling hello_world v0.1.0 (/path/to/hello_world)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.61s
+     Running `target/debug/hello_world`
+Hello, world!
+</code></pre>
+<p>Congratulations! You've just run your first Rust program.</p>
+<h2 id="modifying-the-program"><a class="header" href="#modifying-the-program">Modifying the Program</a></h2>
+<p>Let's make a small change to understand a bit more about Rust. Update your <code>main.rs</code> file to:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let name = "Rustacean";
+    println!("Hello, {}!", name);
+}</code></pre></pre>
+<p>Here's what we've changed:</p>
+<ol>
+<li>
+<p><code>let name = "Rustacean";</code>: We're declaring a variable named <code>name</code> and assigning it the value <code>"Rustacean"</code>. Variables in Rust are immutable (cannot be changed) by default.</p>
+</li>
+<li>
+<p><code>println!("Hello, {}!", name);</code>: We're using a placeholder <code>{}</code> in the string and passing the <code>name</code> variable to fill it.</p>
+</li>
+</ol>
+<p>Run the program again with <code>cargo run</code> and you should see:</p>
+<pre><code>Hello, Rustacean!
+</code></pre>
+<h2 id="adding-comments"><a class="header" href="#adding-comments">Adding Comments</a></h2>
+<p>Comments in Rust start with <code>//</code>. Let's add some comments to our program:</p>
+<pre><pre class="playground"><code class="language-rust">// This is the main function, the entry point of our program
+fn main() {
+    // Declare a variable to hold the name
+    let name = "Rustacean";
+    
+    // Print a greeting using the name variable
+    println!("Hello, {}!", name);
+}</code></pre></pre>
+<p>Comments are ignored by the compiler but are extremely useful for humans reading your code.</p>
+<h2 id="understanding-program-structure"><a class="header" href="#understanding-program-structure">Understanding Program Structure</a></h2>
+<p>Let's take a step back and understand the structure of our Rust project:</p>
+<ul>
+<li><code>Cargo.toml</code>: Contains metadata about our project and its dependencies</li>
+<li><code>src/main.rs</code>: Contains our source code, starting with the <code>main</code> function</li>
+<li><code>target/</code>: Directory created by Cargo to store compiled files</li>
+</ul>
+<p>This basic structure is the foundation for all Rust projects. As projects grow more complex, you'll add more files, modules, and tests, but the fundamental organization remains the same.</p>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<p>From this simple example, we've learned:</p>
+<ol>
+<li>Rust programs start execution in the <code>main</code> function</li>
+<li><code>println!</code> is a macro for printing to the console</li>
+<li>Variables are declared with <code>let</code> and are immutable by default</li>
+<li>String formatting uses <code>{}</code> as placeholder</li>
+<li>Comments start with <code>//</code></li>
+<li>Cargo makes it easy to build and run programs</li>
+</ol>
+<p>This is just the beginning of our Rust journey. Next, we'll learn about Rust's type system and basic syntax.</p>
 
                     </main>
 
