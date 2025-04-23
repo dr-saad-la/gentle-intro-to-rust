@@ -8,7 +8,7 @@ class MDBookSidebarScrollbox extends HTMLElement {
         super();
     }
     connectedCallback() {
-        this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">2.</strong> Chapter 1</a></li></ol>';
+        this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="chap_01/get-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="chap_01/installing-rust.html"><strong aria-hidden="true">2.1.</strong> Installing Rust</a></li><li class="chapter-item expanded "><a href="chap_01/understanding-cargo.html"><strong aria-hidden="true">2.2.</strong> Understanding Cargo</a></li><li class="chapter-item expanded "><a href="chap_01/hello-world.html"><strong aria-hidden="true">2.3.</strong> First Rust Program</a></li><li class="chapter-item expanded "><a href="chap_01/project-structure.html"><strong aria-hidden="true">2.4.</strong> Rust Project Structure</a></li><li class="chapter-item expanded "><a href="chap_01/summary.html"><strong aria-hidden="true">2.5.</strong> Summary</a></li></ol></li></ol>';
         // Set the current, active page, and reveal it if it's hidden
         let current_page = document.location.href.toString().split("#")[0];
         if (current_page.endsWith("/")) {

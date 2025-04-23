@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>A Gentle Introduction to Rust programming language</title>
-        <meta name="robots" content="noindex">
+        <title>Getting Started - A Gentle Introduction to Rust programming language</title>
 
 
         <!-- Custom HTML head -->
@@ -13,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -36,12 +35,12 @@
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "";
+            const path_to_root = "../";
             const default_light_theme = "rust";
             const default_dark_theme = "coal";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="body-container">
@@ -94,7 +93,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -129,7 +128,7 @@
                     <h1 class="menu-title">A Gentle Introduction to Rust programming language</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/dr-saad-la/gentle-intro-to-rust" title="Git repository" aria-label="Git repository">
@@ -161,53 +160,19 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>Welcome to "A Gentle Introduction to Rust," a book designed to make your journey into Rust programming smooth and enjoyable.</p>
-<h2 id="why-rust"><a class="header" href="#why-rust">Why Rust?</a></h2>
-<p>In today's programming landscape, Rust stands out for its unique combination of performance and safety. Created with the vision of empowering developers to build reliable and efficient software, Rust offers memory safety without garbage collection, concurrency without data races, and abstraction without overhead.</p>
-<p>But learning Rust can feel challenging at first. Its unique concepts like ownership, borrowing, and lifetimes represent a different way of thinking about programming. This book aims to make these concepts accessible, breaking them down into digestible pieces with clear explanations and practical examples.</p>
-<h2 id="who-this-book-is-for"><a class="header" href="#who-this-book-is-for">Who This Book Is For</a></h2>
-<p>This book is written for programmers who have experience in at least one other language and want to add Rust to their toolkit. Whether you come from Python, JavaScript, C++, Java, or any other language, this book will guide you through Rust's distinctive features at a comfortable pace.</p>
-<p>You don't need to be an expert programmer to benefit from this book. The focus is on building a solid understanding of Rust fundamentals rather than diving into advanced techniques right away.</p>
-<h2 id="our-approach"><a class="header" href="#our-approach">Our Approach</a></h2>
-<p>Learning Rust should be rewarding, not frustrating. With that in mind, this book:</p>
-<ul>
-<li>Introduces concepts gradually, with each chapter building on the last</li>
-<li>Provides plenty of practical examples that you can run and modify</li>
-<li>Explains not just the "how" but also the "why" behind Rust's design decisions</li>
-<li>Includes exercises to reinforce your understanding</li>
-<li>Avoids jargon where possible, and explains it clearly when it's necessary</li>
-</ul>
-<h2 id="what-youll-learn"><a class="header" href="#what-youll-learn">What You'll Learn</a></h2>
-<p>By the end of this book, you'll understand:</p>
-<ul>
-<li>How to write clean, efficient Rust code</li>
-<li>How Rust's ownership system ensures memory safety</li>
-<li>When and how to use borrowing and references</li>
-<li>How to design with structs, enums, and traits</li>
-<li>How to handle errors the Rust way</li>
-<li>How to write safe concurrent code</li>
-<li>How to organize your code into modules and crates</li>
-<li>How to create and use common collections</li>
-</ul>
-<h2 id="getting-the-most-from-this-book"><a class="header" href="#getting-the-most-from-this-book">Getting the Most from This Book</a></h2>
-<p>I encourage you to code along as you read. Experiment with the examples, modify them, and see what happens. Rust's helpful compiler messages are an excellent learning tool – don't be afraid of errors! They're opportunities to deepen your understanding.</p>
-<p>The code examples in this book are available in the repository at https://github.com/dr-saad-la/gentle-intro-to-rust. Feel free to clone it and follow along.</p>
-<p>Let's begin our journey into Rust – a language that combines the performance of systems programming with the expressiveness and safety of modern languages.</p>
-<p>Welcome aboard!</p>
-<p><em>Dr. Saad Laouadi</em></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-rust"><a class="header" href="#installing-rust">Installing Rust</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-cargo"><a class="header" href="#understanding-cargo">Understanding Cargo</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="first-rust-program"><a class="header" href="#first-rust-program">First Rust Program</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="rust-project-structure"><a class="header" href="#rust-project-structure">Rust Project Structure</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="../chap_01/installing-rust.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -215,7 +180,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="../chap_01/installing-rust.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -230,29 +201,22 @@
             window.playground_copyable = true;
         </script>
 
-        <script src="ace.js"></script>
-        <script src="editor.js"></script>
-        <script src="mode-rust.js"></script>
-        <script src="theme-dawn.js"></script>
-        <script src="theme-tomorrow_night.js"></script>
+        <script src="../ace.js"></script>
+        <script src="../editor.js"></script>
+        <script src="../mode-rust.js"></script>
+        <script src="../theme-dawn.js"></script>
+        <script src="../theme-tomorrow_night.js"></script>
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 
-        <script>
-        window.addEventListener('load', function() {
-            MathJax.Hub.Register.StartupHook('End', function() {
-                window.setTimeout(window.print, 100);
-            });
-        });
-        </script>
 
     </div>
     </body>
