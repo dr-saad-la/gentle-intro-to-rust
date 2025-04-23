@@ -160,7 +160,95 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="variables"><a class="header" href="#variables">Variables</a></h1>
+                        <h1 id="variables-and-mutability"><a class="header" href="#variables-and-mutability">Variables and Mutability</a></h1>
+<p>Variables are a fundamental concept in programming, allowing us to store and manipulate data. Rust's approach to variables has some unique characteristics that set it apart from many other languages.</p>
+<h2 id="variables-are-immutable-by-default"><a class="header" href="#variables-are-immutable-by-default">Variables Are Immutable by Default</a></h2>
+<p>In Rust, variables are immutable (unchangeable) by default. This might seem strange if you're coming from languages where you can freely change variable values, but this default immutability is one of Rust's safety features.</p>
+<p>Let's see an example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 5;
+    println!("The value of x is: {}", x);
+
+    // Uncommenting the next line would cause a compilation error
+    // x = 6;
+    // println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>If you try to change the value of <code>x</code>, the Rust compiler will produce an error like:</p>
+<pre><code>error[E0384]: cannot assign twice to immutable variable `x`
+</code></pre>
+<h2 id="making-variables-mutable"><a class="header" href="#making-variables-mutable">Making Variables Mutable</a></h2>
+<p>When you need a variable whose value can change, you can make it mutable by adding the <code>mut</code> keyword:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut x = 5;
+    println!("The value of x is: {}", x);
+
+    x = 6;  // This works now!
+    println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>This program will compile and run successfully, printing:</p>
+<pre><code>The value of x is: 5
+The value of x is: 6
+</code></pre>
+<h2 id="constants"><a class="header" href="#constants">Constants</a></h2>
+<p>Rust also has constants, which are similar to immutable variables but with a few differences:</p>
+<ul>
+<li>Constants are declared with the <code>const</code> keyword instead of <code>let</code></li>
+<li>The type of a constant must be annotated</li>
+<li>Constants can be declared in any scope, including the global scope</li>
+<li>Constants can only be set to a constant expression, not the result of a function call or any other value that could only be computed at runtime</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">const MAX_POINTS: u32 = 100_000;
+
+fn main() {
+    println!("The maximum points is: {}", MAX_POINTS);
+}</code></pre></pre>
+<p>Notice a few things:</p>
+<ul>
+<li>We use ALL_CAPS for constant names by convention</li>
+<li>We can use underscores in numeric literals for readability</li>
+<li>We must specify the type (here <code>u32</code>)</li>
+</ul>
+<h2 id="shadowing"><a class="header" href="#shadowing">Shadowing</a></h2>
+<p>Rust allows a variable to be "shadowed" by declaring a new variable with the same name:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 5;
+
+    let x = x + 1;  // Shadows the previous x
+
+    {
+        let x = x * 2;  // Shadows x within this scope
+        println!("The value of x in the inner scope is: {}", x);  // Prints 12
+    }
+
+    println!("The value of x is: {}", x);  // Prints 6
+}</code></pre></pre>
+<p>Shadowing is different from marking a variable as <code>mut</code> because:</p>
+<ol>
+<li>We create a new variable when we use <code>let</code> again, which allows us to change the type of the value but reuse the same name</li>
+<li>Shadowing respects scopes, so the shadowed value only exists within its scope</li>
+</ol>
+<h2 id="type-transformations-with-shadowing"><a class="header" href="#type-transformations-with-shadowing">Type Transformations with Shadowing</a></h2>
+<p>Shadowing lets us change the type of a variable while reusing the same name:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let spaces = "   ";  // spaces is a string
+    let spaces = spaces.len();  // spaces is now a number
+
+    println!("Space count: {}", spaces);  // Prints 3
+}</code></pre></pre>
+<p>This wouldn't be possible with <code>mut</code> because changing a variable's type isn't allowed with mutation:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut spaces = "   ";
+    // spaces = spaces.len();  // This would cause a compilation error
+}</code></pre></pre>
+<h2 id="why-immutability-matters"><a class="header" href="#why-immutability-matters">Why Immutability Matters</a></h2>
+<p>You might wonder why Rust defaults to immutability. There are several benefits:</p>
+<ol>
+<li><strong>Security</strong>: Immutable data can't be changed accidentally</li>
+<li><strong>Concurrency</strong>: It's easier to reason about code when data doesn't change</li>
+<li><strong>Optimization</strong>: The compiler can make optimizations when it knows a value won't change</li>
+</ol>
+<p>While writing code that only uses immutable variables might seem restrictive, it often leads to cleaner, more maintainable code. Rust gives you the flexibility to choose mutability when needed but encourages immutability as a default stance.</p>
+<p>In the next section, we'll explore Rust's data types.</p>
 
                     </main>
 

@@ -161,6 +161,129 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="data-types"><a class="header" href="#data-types">Data Types</a></h1>
+<p>Every value in Rust has a specific data type, which tells the compiler how to work with that data. Rust is a statically typed language, meaning that it must know the types of all variables at compile time. The compiler can usually infer what type we want based on the value and how we use it, but sometimes we need to add explicit type annotations.</p>
+<p>Let's explore the various data types in Rust.</p>
+<h2 id="scalar-types"><a class="header" href="#scalar-types">Scalar Types</a></h2>
+<p>Scalar types represent a single value. Rust has four primary scalar types:</p>
+<h3 id="integer-types"><a class="header" href="#integer-types">Integer Types</a></h3>
+<p>Integers are numbers without a fractional component. Rust provides signed and unsigned integers in various sizes:</p>
+<div class="table-wrapper"><table><thead><tr><th>Length</th><th>Signed</th><th>Unsigned</th></tr></thead><tbody>
+<tr><td>8-bit</td><td>i8</td><td>u8</td></tr>
+<tr><td>16-bit</td><td>i16</td><td>u16</td></tr>
+<tr><td>32-bit</td><td>i32</td><td>u32</td></tr>
+<tr><td>64-bit</td><td>i64</td><td>u64</td></tr>
+<tr><td>128-bit</td><td>i128</td><td>u128</td></tr>
+<tr><td>arch</td><td>isize</td><td>usize</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li>Signed integers can represent both positive and negative numbers</li>
+<li>Unsigned integers can only represent positive numbers (including zero)</li>
+<li>The <code>isize</code> and <code>usize</code> types depend on the architecture of the computer (64 bits on a 64-bit system)</li>
+</ul>
+<p>Integer literals can be written in several forms:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let decimal = 98_222;      // Decimal
+    let hex = 0xff;            // Hexadecimal
+    let octal = 0o77;          // Octal
+    let binary = 0b1111_0000;  // Binary
+    let byte = b'A';           // Byte (u8 only)
+
+    println!("{}, {}, {}, {}, {}", decimal, hex, octal, binary, byte);
+}</code></pre></pre>
+<p>The default integer type is <code>i32</code>, which is generally the fastest even on 64-bit systems.</p>
+<h3 id="floating-point-types"><a class="header" href="#floating-point-types">Floating-Point Types</a></h3>
+<p>Floating-point numbers are numbers with decimal points. Rust has two floating-point types:</p>
+<ul>
+<li><code>f32</code>: 32-bit floating point</li>
+<li><code>f64</code>: 64-bit floating point (default)</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 2.0;      // f64 by default
+    let y: f32 = 3.0; // f32 with explicit type annotation
+
+    println!("x: {}, y: {}", x, y);
+}</code></pre></pre>
+<p>Floating-point numbers are represented according to the IEEE-754 standard.</p>
+<h3 id="boolean-type"><a class="header" href="#boolean-type">Boolean Type</a></h3>
+<p>The boolean type has two possible values: <code>true</code> and <code>false</code>. Booleans are one byte in size.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let t = true;
+    let f: bool = false; // with explicit type annotation
+
+    println!("t: {}, f: {}", t, f);
+}</code></pre></pre>
+<p>Booleans are commonly used in conditional statements like <code>if</code> expressions.</p>
+<h3 id="character-type"><a class="header" href="#character-type">Character Type</a></h3>
+<p>Rust's <code>char</code> type represents a Unicode Scalar Value, which means it can represent more than just ASCII. Characters use single quotes, while strings use double quotes.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let c = 'z';
+    let z: char = 'ℤ'; // with explicit type annotation
+    let heart_eyed_cat = '😻';
+
+    println!("{}, {}, {}", c, z, heart_eyed_cat);
+}</code></pre></pre>
+<p>Rust's <code>char</code> type is four bytes in size, allowing it to represent a wide range of Unicode characters.</p>
+<h2 id="compound-types"><a class="header" href="#compound-types">Compound Types</a></h2>
+<p>Compound types can group multiple values into one type. Rust has two primitive compound types: tuples and arrays.</p>
+<h3 id="tuple-type"><a class="header" href="#tuple-type">Tuple Type</a></h3>
+<p>A tuple is a general way of grouping together a number of values with a variety of types into one compound type. Tuples have a fixed length: once declared, they cannot grow or shrink in size.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+
+    // Destructuring a tuple
+    let (x, y, z) = tup;
+    println!("The values are: {}, {}, {}", x, y, z);
+
+    // Accessing tuple elements with dot notation
+    let five_hundred = tup.0;
+    let six_point_four = tup.1;
+    let one = tup.2;
+
+    println!("Values by index: {}, {}, {}", five_hundred, six_point_four, one);
+}</code></pre></pre>
+<p>A tuple with no values <code>()</code> is called the unit type and represents an empty value or empty return type.</p>
+<h3 id="array-type"><a class="header" href="#array-type">Array Type</a></h3>
+<p>An array is a collection of multiple values of the same type. Unlike arrays in some languages, arrays in Rust have a fixed length.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    // With explicit type annotation [type; size]
+    let months: [&amp;str; 12] = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"];
+
+    // Creating an array with the same value repeated
+    let zeros = [0; 5]; // Creates [0, 0, 0, 0, 0]
+
+    // Accessing array elements
+    let first = a[0];
+    let second = a[1];
+
+    println!("First: {}, Second: {}", first, second);
+}</code></pre></pre>
+<p>Arrays are useful when you want your data allocated on the stack rather than the heap, or when you want to ensure you always have a fixed number of elements.</p>
+<h4 id="bounds-checking-in-arrays"><a class="header" href="#bounds-checking-in-arrays">Bounds Checking in Arrays</a></h4>
+<p>If you try to access an element at an index that doesn't exist, Rust will panic (crash with an error) at runtime:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    // This will compile but panic at runtime if the index is out of bounds
+    let index = 10;
+    let element = a[index]; // Will panic!
+
+    println!("The element is: {}", element);
+}</code></pre></pre>
+<p>This is a safety feature of Rust that prevents buffer overflows and other memory safety issues.</p>
+<h2 id="type-annotations"><a class="header" href="#type-annotations">Type Annotations</a></h2>
+<p>As mentioned earlier, Rust can usually infer the type of a variable, but sometimes we need to provide explicit type annotations. We do this by adding a colon followed by the type after the variable name:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let guess: u32 = "42".parse().expect("Not a number!");
+<span class="boring">}</span></code></pre></pre>
+<p>In this example, we're telling Rust that <code>guess</code> should be a <code>u32</code> (an unsigned 32-bit integer). Without this annotation, Rust wouldn't know which type to use for <code>parse()</code>.</p>
+<h2 id="custom-types"><a class="header" href="#custom-types">Custom Types</a></h2>
+<p>Beyond these built-in types, Rust allows you to define your own types using <code>struct</code> and <code>enum</code> declarations. We'll cover these in more detail in later chapters.</p>
+<p>Understanding Rust's type system is crucial for writing effective and safe Rust code. The compiler will help ensure you're using data correctly, preventing many common bugs before your program even runs.</p>
 
                     </main>
 

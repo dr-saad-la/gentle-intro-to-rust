@@ -161,6 +161,140 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<p>Functions are the building blocks of readable, maintainable code. They allow us to break up our code into smaller pieces with specific purposes, making our programs easier to understand and modify. In this section, we'll explore how functions work in Rust.</p>
+<h2 id="defining-functions"><a class="header" href="#defining-functions">Defining Functions</a></h2>
+<p>We've already seen the most important function in Rust programs: the <code>main</code> function, which is the entry point of many programs. Defining a new function is straightforward:</p>
+<pre><pre class="playground"><code class="language-rust">fn another_function() {
+    println!("Another function.");
+}
+
+fn main() {
+    println!("Hello from main!");
+    another_function();
+}</code></pre></pre>
+<p>Function definitions in Rust start with <code>fn</code> and have a set of parentheses after the function name. The curly brackets tell the compiler where the function body begins and ends.</p>
+<p>We can call any function we've defined by entering its name followed by a set of parentheses. In the example above, we call <code>another_function()</code> from inside the <code>main</code> function.</p>
+<h2 id="function-parameters"><a class="header" href="#function-parameters">Function Parameters</a></h2>
+<p>Functions can take parameters, which are special variables that are part of a function's signature:</p>
+<pre><pre class="playground"><code class="language-rust">fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is: {}{}", value, unit_label);
+}
+
+fn main() {
+    print_labeled_measurement(5, 'h');
+}</code></pre></pre>
+<p>In this function signature, <code>print_labeled_measurement</code> has two parameters: <code>value</code> of type <code>i32</code> and <code>unit_label</code> of type <code>char</code>. When we call the function, we pass in the values (arguments) <code>5</code> and <code>'h'</code>.</p>
+<p>Note that in Rust function signatures, you <strong>must</strong> declare the type of each parameter. This is a deliberate design decision to improve code clarity.</p>
+<h2 id="statements-and-expressions"><a class="header" href="#statements-and-expressions">Statements and Expressions</a></h2>
+<p>Understanding the difference between statements and expressions in Rust is important:</p>
+<ul>
+<li><strong>Statements</strong> are instructions that perform an action but do not return a value.</li>
+<li><strong>Expressions</strong> evaluate to a resulting value.</li>
+</ul>
+<p>Creating a variable and assigning a value to it with the <code>let</code> keyword is a statement:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let y = 6; // This is a statement
+}</code></pre></pre>
+<p>Function definitions are also statements. Statements do not return values, which is why the following code would not work:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = (let y = 6); // Error: let statements don't return values
+}</code></pre></pre>
+<p>Expressions evaluate to a value and can be part of statements. For example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let y = {
+        let x = 3;
+        x + 1  // Note: no semicolon here!
+    };
+
+    println!("The value of y is: {}", y); // Prints 4
+}</code></pre></pre>
+<p>In this example, the block <code>{ let x = 3; x + 1 }</code> is an expression that evaluates to <code>4</code>. Note that the expression <code>x + 1</code> doesn't end with a semicolon. If we added a semicolon, it would become a statement and wouldn't return a value.</p>
+<h2 id="function-return-values"><a class="header" href="#function-return-values">Function Return Values</a></h2>
+<p>Functions can return values to the code that calls them. We don't name return values, but we do declare their type after an arrow (<code>-&gt;</code>):</p>
+<pre><pre class="playground"><code class="language-rust">fn five() -&gt; i32 {
+    5
+}
+
+fn main() {
+    let x = five();
+    println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>There are no function return keywords in the <code>five</code> function. Instead, we return the value by writing an expression without a semicolon at the end of the function. You can use the <code>return</code> keyword to return early from a function, but most functions return the last expression implicitly.</p>
+<p>Here's a more complex example that uses a condition to determine the return value:</p>
+<pre><pre class="playground"><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn main() {
+    let x = plus_one(5);
+    println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>Adding a semicolon to the end of an expression turns it into a statement, which doesn't return a value. If we changed our function to:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn plus_one(x: i32) -&gt; i32 {
+    x + 1;  // Error: doesn't return a value
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We would get a compile-time error because we're not returning a value, but we promised to return an <code>i32</code>.</p>
+<h2 id="multiple-return-values-using-tuples"><a class="header" href="#multiple-return-values-using-tuples">Multiple Return Values Using Tuples</a></h2>
+<p>While a function can only have one return type, we can use a tuple to return multiple values:</p>
+<pre><pre class="playground"><code class="language-rust">fn calculate_statistics(numbers: &amp;[i32]) -&gt; (i32, i32, i32) {
+    let sum: i32 = numbers.iter().sum();
+    let max: i32 = *numbers.iter().max().unwrap_or(&amp;0);
+    let min: i32 = *numbers.iter().min().unwrap_or(&amp;0);
+
+    (sum, max, min)
+}
+
+fn main() {
+    let numbers = [1, 5, 10, 2, 8];
+    let (sum, max, min) = calculate_statistics(&amp;numbers);
+
+    println!("Sum: {}, Max: {}, Min: {}", sum, max, min);
+}</code></pre></pre>
+<p>Here, our function returns a tuple containing the sum, maximum, and minimum values of an array.</p>
+<h2 id="function-pointers"><a class="header" href="#function-pointers">Function Pointers</a></h2>
+<p>Functions can be passed as arguments to other functions:</p>
+<pre><pre class="playground"><code class="language-rust">fn apply_twice(f: fn(i32) -&gt; i32, arg: i32) -&gt; i32 {
+    f(f(arg))
+}
+
+fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn main() {
+    let result = apply_twice(add_one, 5);
+    println!("Result: {}", result);  // Prints 7
+}</code></pre></pre>
+<p>In this example, <code>apply_twice</code> takes a function pointer <code>f</code> and an argument, then applies the function twice to the argument.</p>
+<h2 id="closures"><a class="header" href="#closures">Closures</a></h2>
+<p>Rust also supports closures, which are anonymous functions you can save in a variable or pass as arguments to other functions:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let add_one = |x| x + 1;
+    let result = add_one(5);
+    println!("Result: {}", result);  // Prints 6
+}</code></pre></pre>
+<p>Closures can capture their environment, allowing them to access variables from the scope in which they're defined:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 4;
+    let equal_to_x = |z| z == x;
+
+    let y = 4;
+    println!("{}", equal_to_x(y));  // Prints true
+}</code></pre></pre>
+<p>We'll cover closures in more detail in a later chapter.</p>
+<h2 id="function-best-practices"><a class="header" href="#function-best-practices">Function Best Practices</a></h2>
+<p>Here are some best practices for writing functions in Rust:</p>
+<ol>
+<li><strong>Keep functions small and focused</strong>: Each function should do one thing well.</li>
+<li><strong>Use descriptive names</strong>: Function names should clearly describe what they do.</li>
+<li><strong>Follow Rust's naming convention</strong>: Use snake_case for function names.</li>
+<li><strong>Document your functions</strong>: Use documentation comments <code>///</code> to explain what your function does.</li>
+<li><strong>Provide useful error messages</strong>: If your function can fail, make sure error messages are helpful.</li>
+</ol>
+<p>Functions are a fundamental part of Rust programming. As you continue your Rust journey, you'll learn more advanced ways to work with functions, including methods associated with types, closures, and higher-order functions.</p>
 
                     </main>
 

@@ -161,6 +161,280 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="operators-and-expressions"><a class="header" href="#operators-and-expressions">Operators and Expressions</a></h1>
+<p>Rust provides a variety of operators that allow you to perform operations on values. In this section, we'll explore the most common operators in Rust and how they're used in expressions.</p>
+<h2 id="arithmetic-operators"><a class="header" href="#arithmetic-operators">Arithmetic Operators</a></h2>
+<p>Rust supports standard arithmetic operators for numeric types:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Addition
+    let sum = 5 + 10;
+
+    // Subtraction
+    let difference = 95.5 - 4.3;
+
+    // Multiplication
+    let product = 4 * 30;
+
+    // Division
+    let quotient = 56.7 / 32.2;
+    let truncated = -5 / 3; // Results in -1
+
+    // Remainder
+    let remainder = 43 % 5;
+
+    println!("Sum: {}", sum);
+    println!("Difference: {}", difference);
+    println!("Product: {}", product);
+    println!("Quotient: {}", quotient);
+    println!("Truncated: {}", truncated);
+    println!("Remainder: {}", remainder);
+}</code></pre></pre>
+<p>A few important notes about arithmetic in Rust:</p>
+<ul>
+<li>Integer division truncates toward zero</li>
+<li>The remainder operator <code>%</code> works with integer types only</li>
+<li>If you perform an operation that would cause integer overflow in debug mode, your program will panic (crash)</li>
+<li>In release mode, overflow wraps around (e.g., u8 value 255 + 1 becomes 0)</li>
+</ul>
+<h2 id="comparison-operators"><a class="header" href="#comparison-operators">Comparison Operators</a></h2>
+<p>Comparison operators compare two values and return a boolean:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let is_equal = 5 == 5;
+    let is_not_equal = 5 != 10;
+    let is_greater = 10 &gt; 5;
+    let is_less = 5 &lt; 10;
+    let is_greater_or_equal = 10 &gt;= 10;
+    let is_less_or_equal = 5 &lt;= 5;
+
+    println!("Equal: {}", is_equal);
+    println!("Not Equal: {}", is_not_equal);
+    println!("Greater: {}", is_greater);
+    println!("Less: {}", is_less);
+    println!("Greater or Equal: {}", is_greater_or_equal);
+    println!("Less or Equal: {}", is_less_or_equal);
+}</code></pre></pre>
+<p>Comparison operators are most commonly used in conditionals (<code>if</code> statements, <code>while</code> loops, etc.).</p>
+<h2 id="logical-operators"><a class="header" href="#logical-operators">Logical Operators</a></h2>
+<p>Logical operators work with boolean values:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let is_true = true;
+    let is_false = false;
+
+    // Logical AND
+    let logical_and = is_true &amp;&amp; is_false;
+
+    // Logical OR
+    let logical_or = is_true || is_false;
+
+    // Logical NOT
+    let logical_not = !is_true;
+
+    println!("AND: {}", logical_and);
+    println!("OR: {}", logical_or);
+    println!("NOT: {}", logical_not);
+}</code></pre></pre>
+<p>Logical operators are short-circuiting:</p>
+<ul>
+<li><code>&amp;&amp;</code> will only evaluate the right side if the left side is <code>true</code></li>
+<li><code>||</code> will only evaluate the right side if the left side is <code>false</code></li>
+</ul>
+<h2 id="bitwise-operators"><a class="header" href="#bitwise-operators">Bitwise Operators</a></h2>
+<p>Rust provides operators for bitwise manipulation:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a: u8 = 0b1010; // Binary representation of 10
+    let b: u8 = 0b1100; // Binary representation of 12
+
+    // Bitwise AND
+    let bitwise_and = a &amp; b;  // 0b1000 (8 in decimal)
+
+    // Bitwise OR
+    let bitwise_or = a | b;   // 0b1110 (14 in decimal)
+
+    // Bitwise XOR
+    let bitwise_xor = a ^ b;  // 0b0110 (6 in decimal)
+
+    // Bitwise NOT (inverts all bits)
+    let bitwise_not = !a;     // 0b11110101 (245 in decimal for a u8)
+
+    // Left shift
+    let left_shift = a &lt;&lt; 1;  // 0b10100 (20 in decimal)
+
+    // Right shift
+    let right_shift = a &gt;&gt; 1; // 0b0101 (5 in decimal)
+
+    println!("AND: {:08b} ({})", bitwise_and, bitwise_and);
+    println!("OR: {:08b} ({})", bitwise_or, bitwise_or);
+    println!("XOR: {:08b} ({})", bitwise_xor, bitwise_xor);
+    println!("NOT: {:08b} ({})", bitwise_not, bitwise_not);
+    println!("Left Shift: {:08b} ({})", left_shift, left_shift);
+    println!("Right Shift: {:08b} ({})", right_shift, right_shift);
+}</code></pre></pre>
+<p>Bitwise operators are useful for low-level programming, working with hardware, and implementing certain algorithms efficiently.</p>
+<h2 id="assignment-operators"><a class="header" href="#assignment-operators">Assignment Operators</a></h2>
+<p>The simplest assignment operator is <code>=</code>, which assigns a value to a variable:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 5;
+<span class="boring">}</span></code></pre></pre>
+<p>Rust also has compound assignment operators that combine operation and assignment:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut x = 5;
+
+    // Addition and assignment
+    x += 1;  // Equivalent to x = x + 1
+    println!("After +=: {}", x);
+
+    // Subtraction and assignment
+    x -= 2;  // Equivalent to x = x - 2
+    println!("After -=: {}", x);
+
+    // Multiplication and assignment
+    x *= 3;  // Equivalent to x = x * 3
+    println!("After *=: {}", x);
+
+    // Division and assignment
+    x /= 2;  // Equivalent to x = x / 2
+    println!("After /=: {}", x);
+
+    // Remainder and assignment
+    x %= 3;  // Equivalent to x = x % 3
+    println!("After %=: {}", x);
+
+    // Bitwise operations also have compound assignment versions
+    x &amp;= 2;  // Equivalent to x = x &amp; 2
+    println!("After &amp;=: {}", x);
+}</code></pre></pre>
+<p>Remember that the variable must be mutable (<code>mut</code>) to use compound assignment operators.</p>
+<h2 id="range-operators"><a class="header" href="#range-operators">Range Operators</a></h2>
+<p>Rust provides range operators for creating iterators over a range of values:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Exclusive range (does not include the upper bound)
+    for i in 1..5 {
+        print!("{} ", i);  // Prints "1 2 3 4 "
+    }
+    println!();
+
+    // Inclusive range (includes the upper bound)
+    for i in 1..=5 {
+        print!("{} ", i);  // Prints "1 2 3 4 5 "
+    }
+    println!();
+
+    // Ranges can be used with chars too
+    for c in 'a'..='e' {
+        print!("{} ", c);  // Prints "a b c d e "
+    }
+    println!();
+
+    // Creating a range without iterating it
+    let _range = 1..5;  // Can be used elsewhere, like in slice operations
+}</code></pre></pre>
+<p>Range operators are commonly used in <code>for</code> loops and slice operations.</p>
+<h2 id="the-dereference-and-borrow-operators"><a class="header" href="#the-dereference-and-borrow-operators">The Dereference and Borrow Operators</a></h2>
+<p>Rust has operators for working with references and pointers:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 5;
+
+    // The borrow operator (&amp;) creates a reference
+    let y = &amp;x;
+
+    // The dereference operator (*) accesses the value a reference points to
+    println!("x: {}, y: {}, *y: {}", x, y, *y);
+
+    // Mutable borrowing
+    let mut z = 10;
+    let z_ref = &amp;mut z;
+    *z_ref += 5;
+
+    println!("z after modification: {}", z);
+}</code></pre></pre>
+<p>We'll cover references and borrowing in much more detail in the next chapter.</p>
+<h2 id="type-casting-operator"><a class="header" href="#type-casting-operator">Type Casting Operator</a></h2>
+<p>The <code>as</code> keyword is used for type casting in Rust:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = 15;       // i32 by default
+    let b = a as u8;  // Cast to u8
+    let c = a as f32; // Cast to f32
+
+    println!("a: {} ({})", a, type_of(&amp;a));
+    println!("b: {} ({})", b, type_of(&amp;b));
+    println!("c: {} ({})", c, type_of(&amp;c));
+
+    // Casting char to u8 gives its ASCII/Unicode code point
+    let d = 'A' as u8;
+    println!("ASCII value of 'A': {}", d);
+
+    // And vice versa
+    let e = 66 as char;
+    println!("Character with code point 66: {}", e);
+}
+
+// Helper function to get the type of a variable for demonstration
+fn type_of&lt;T&gt;(_: &amp;T) -&gt; String {
+    std::any::type_name::&lt;T&gt;().to_string()
+}</code></pre></pre>
+<p>Type casting in Rust is explicit. The compiler will not automatically cast types for you in most cases, helping prevent subtle bugs.</p>
+<h2 id="operator-precedence"><a class="header" href="#operator-precedence">Operator Precedence</a></h2>
+<p>Operators in Rust have different precedence levels, which determine the order of evaluation when multiple operators appear in an expression:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Multiplication has higher precedence than addition
+    let result = 5 + 3 * 2;  // 3 * 2 is evaluated first, so result is 11
+    println!("5 + 3 * 2 = {}", result);
+
+    // Parentheses can be used to override precedence
+    let result = (5 + 3) * 2;  // 5 + 3 is evaluated first, so result is 16
+    println!("(5 + 3) * 2 = {}", result);
+}</code></pre></pre>
+<p>Here's a simplified precedence table (from highest to lowest):</p>
+<ol>
+<li>Method calls (<code>.</code>)</li>
+<li>Field access (<code>expr.field</code>)</li>
+<li>Function calls, array indexing (<code>foo()</code>, <code>arr[0]</code>)</li>
+<li>Unary operators (<code>!</code>, <code>-</code>, <code>*</code> dereference, <code>&amp;</code> borrow)</li>
+<li>Type cast (<code>as</code>)</li>
+<li>Multiplication, division, remainder (<code>*</code>, <code>/</code>, <code>%</code>)</li>
+<li>Addition, subtraction (<code>+</code>, <code>-</code>)</li>
+<li>Shift (<code>&lt;&lt;</code>, <code>&gt;&gt;</code>)</li>
+<li>Bitwise AND (<code>&amp;</code>)</li>
+<li>Bitwise XOR (<code>^</code>)</li>
+<li>Bitwise OR (<code>|</code>)</li>
+<li>Comparisons (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>)</li>
+<li>Logical AND (<code>&amp;&amp;</code>)</li>
+<li>Logical OR (<code>||</code>)</li>
+<li>Range (<code>..</code>, <code>..=</code>)</li>
+<li>Assignment (<code>=</code>, <code>+=</code>, etc.)</li>
+</ol>
+<p>When in doubt, use parentheses to make your intentions clear.</p>
+<h2 id="expressions-and-statements"><a class="header" href="#expressions-and-statements">Expressions and Statements</a></h2>
+<p>As we mentioned in the Functions section, Rust is an expression-based language. Most constructs in Rust are expressions that evaluate to a value.</p>
+<p>Even control flow constructs like <code>if</code> and <code>match</code> are expressions:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let condition = true;
+
+    // if as an expression
+    let number = if condition { 5 } else { 6 };
+    println!("The value of number is: {}", number);
+
+    // match as an expression
+    let x = 1;
+    let message = match x {
+        0 =&gt; "zero",
+        1 =&gt; "one",
+        2 =&gt; "two",
+        _ =&gt; "many",
+    };
+    println!("The message is: {}", message);
+
+    // Block expressions
+    let y = {
+        let inner = 2;
+        inner * inner + 1  // Note: no semicolon means this is the return value
+    };
+    println!("The value of y is: {}", y);
+}</code></pre></pre>
+<p>Understanding that nearly everything in Rust is an expression helps write more concise and expressive code.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Operators and expressions are fundamental building blocks of Rust programming. They allow you to manipulate values in a variety of ways and combine simple expressions into complex ones. Rust's expression-oriented nature and explicit type handling make the language both powerful and predictable, helping prevent common programming errors.</p>
+<p>As you continue with Rust, you'll discover more advanced ways to combine operators and expressions to solve complex problems efficiently.</p>
 
                     </main>
 

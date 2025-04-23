@@ -641,13 +641,1217 @@ members = [
 </ul>
 <p>Remember, learning to program in Rust is a journey. Don't worry if some concepts aren't entirely clear yet—we'll revisit and expand on them in future chapters.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-fundamentals"><a class="header" href="#rust-fundamentals">Rust Fundamentals</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="variables"><a class="header" href="#variables">Variables</a></h1>
+<p>Now that you have Rust installed and have written your first program, it's time to dive deeper into the language fundamentals. This chapter will introduce you to the core building blocks of Rust programming.</p>
+<p>In this chapter, we'll explore:</p>
+<ul>
+<li>Variables and data types</li>
+<li>Functions and how they work in Rust</li>
+<li>Control flow with conditionals and loops</li>
+<li>Basic operators</li>
+<li>Rust's commenting and documentation system</li>
+</ul>
+<p>Understanding these fundamentals will give you the foundation needed to write meaningful Rust programs. Rust's syntax may look familiar if you've used other programming languages before, but there are some unique aspects that we'll highlight as we go.</p>
+<p>Let's start with one of the most fundamental concepts in any programming language: variables and data types.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="variables-and-mutability"><a class="header" href="#variables-and-mutability">Variables and Mutability</a></h1>
+<p>Variables are a fundamental concept in programming, allowing us to store and manipulate data. Rust's approach to variables has some unique characteristics that set it apart from many other languages.</p>
+<h2 id="variables-are-immutable-by-default"><a class="header" href="#variables-are-immutable-by-default">Variables Are Immutable by Default</a></h2>
+<p>In Rust, variables are immutable (unchangeable) by default. This might seem strange if you're coming from languages where you can freely change variable values, but this default immutability is one of Rust's safety features.</p>
+<p>Let's see an example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 5;
+    println!("The value of x is: {}", x);
+
+    // Uncommenting the next line would cause a compilation error
+    // x = 6;
+    // println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>If you try to change the value of <code>x</code>, the Rust compiler will produce an error like:</p>
+<pre><code>error[E0384]: cannot assign twice to immutable variable `x`
+</code></pre>
+<h2 id="making-variables-mutable"><a class="header" href="#making-variables-mutable">Making Variables Mutable</a></h2>
+<p>When you need a variable whose value can change, you can make it mutable by adding the <code>mut</code> keyword:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut x = 5;
+    println!("The value of x is: {}", x);
+
+    x = 6;  // This works now!
+    println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>This program will compile and run successfully, printing:</p>
+<pre><code>The value of x is: 5
+The value of x is: 6
+</code></pre>
+<h2 id="constants"><a class="header" href="#constants">Constants</a></h2>
+<p>Rust also has constants, which are similar to immutable variables but with a few differences:</p>
+<ul>
+<li>Constants are declared with the <code>const</code> keyword instead of <code>let</code></li>
+<li>The type of a constant must be annotated</li>
+<li>Constants can be declared in any scope, including the global scope</li>
+<li>Constants can only be set to a constant expression, not the result of a function call or any other value that could only be computed at runtime</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">const MAX_POINTS: u32 = 100_000;
+
+fn main() {
+    println!("The maximum points is: {}", MAX_POINTS);
+}</code></pre></pre>
+<p>Notice a few things:</p>
+<ul>
+<li>We use ALL_CAPS for constant names by convention</li>
+<li>We can use underscores in numeric literals for readability</li>
+<li>We must specify the type (here <code>u32</code>)</li>
+</ul>
+<h2 id="shadowing"><a class="header" href="#shadowing">Shadowing</a></h2>
+<p>Rust allows a variable to be "shadowed" by declaring a new variable with the same name:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 5;
+
+    let x = x + 1;  // Shadows the previous x
+
+    {
+        let x = x * 2;  // Shadows x within this scope
+        println!("The value of x in the inner scope is: {}", x);  // Prints 12
+    }
+
+    println!("The value of x is: {}", x);  // Prints 6
+}</code></pre></pre>
+<p>Shadowing is different from marking a variable as <code>mut</code> because:</p>
+<ol>
+<li>We create a new variable when we use <code>let</code> again, which allows us to change the type of the value but reuse the same name</li>
+<li>Shadowing respects scopes, so the shadowed value only exists within its scope</li>
+</ol>
+<h2 id="type-transformations-with-shadowing"><a class="header" href="#type-transformations-with-shadowing">Type Transformations with Shadowing</a></h2>
+<p>Shadowing lets us change the type of a variable while reusing the same name:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let spaces = "   ";  // spaces is a string
+    let spaces = spaces.len();  // spaces is now a number
+
+    println!("Space count: {}", spaces);  // Prints 3
+}</code></pre></pre>
+<p>This wouldn't be possible with <code>mut</code> because changing a variable's type isn't allowed with mutation:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut spaces = "   ";
+    // spaces = spaces.len();  // This would cause a compilation error
+}</code></pre></pre>
+<h2 id="why-immutability-matters"><a class="header" href="#why-immutability-matters">Why Immutability Matters</a></h2>
+<p>You might wonder why Rust defaults to immutability. There are several benefits:</p>
+<ol>
+<li><strong>Security</strong>: Immutable data can't be changed accidentally</li>
+<li><strong>Concurrency</strong>: It's easier to reason about code when data doesn't change</li>
+<li><strong>Optimization</strong>: The compiler can make optimizations when it knows a value won't change</li>
+</ol>
+<p>While writing code that only uses immutable variables might seem restrictive, it often leads to cleaner, more maintainable code. Rust gives you the flexibility to choose mutability when needed but encourages immutability as a default stance.</p>
+<p>In the next section, we'll explore Rust's data types.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-types"><a class="header" href="#data-types">Data Types</a></h1>
+<p>Every value in Rust has a specific data type, which tells the compiler how to work with that data. Rust is a statically typed language, meaning that it must know the types of all variables at compile time. The compiler can usually infer what type we want based on the value and how we use it, but sometimes we need to add explicit type annotations.</p>
+<p>Let's explore the various data types in Rust.</p>
+<h2 id="scalar-types"><a class="header" href="#scalar-types">Scalar Types</a></h2>
+<p>Scalar types represent a single value. Rust has four primary scalar types:</p>
+<h3 id="integer-types"><a class="header" href="#integer-types">Integer Types</a></h3>
+<p>Integers are numbers without a fractional component. Rust provides signed and unsigned integers in various sizes:</p>
+<div class="table-wrapper"><table><thead><tr><th>Length</th><th>Signed</th><th>Unsigned</th></tr></thead><tbody>
+<tr><td>8-bit</td><td>i8</td><td>u8</td></tr>
+<tr><td>16-bit</td><td>i16</td><td>u16</td></tr>
+<tr><td>32-bit</td><td>i32</td><td>u32</td></tr>
+<tr><td>64-bit</td><td>i64</td><td>u64</td></tr>
+<tr><td>128-bit</td><td>i128</td><td>u128</td></tr>
+<tr><td>arch</td><td>isize</td><td>usize</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li>Signed integers can represent both positive and negative numbers</li>
+<li>Unsigned integers can only represent positive numbers (including zero)</li>
+<li>The <code>isize</code> and <code>usize</code> types depend on the architecture of the computer (64 bits on a 64-bit system)</li>
+</ul>
+<p>Integer literals can be written in several forms:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let decimal = 98_222;      // Decimal
+    let hex = 0xff;            // Hexadecimal
+    let octal = 0o77;          // Octal
+    let binary = 0b1111_0000;  // Binary
+    let byte = b'A';           // Byte (u8 only)
+
+    println!("{}, {}, {}, {}, {}", decimal, hex, octal, binary, byte);
+}</code></pre></pre>
+<p>The default integer type is <code>i32</code>, which is generally the fastest even on 64-bit systems.</p>
+<h3 id="floating-point-types"><a class="header" href="#floating-point-types">Floating-Point Types</a></h3>
+<p>Floating-point numbers are numbers with decimal points. Rust has two floating-point types:</p>
+<ul>
+<li><code>f32</code>: 32-bit floating point</li>
+<li><code>f64</code>: 64-bit floating point (default)</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 2.0;      // f64 by default
+    let y: f32 = 3.0; // f32 with explicit type annotation
+
+    println!("x: {}, y: {}", x, y);
+}</code></pre></pre>
+<p>Floating-point numbers are represented according to the IEEE-754 standard.</p>
+<h3 id="boolean-type"><a class="header" href="#boolean-type">Boolean Type</a></h3>
+<p>The boolean type has two possible values: <code>true</code> and <code>false</code>. Booleans are one byte in size.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let t = true;
+    let f: bool = false; // with explicit type annotation
+
+    println!("t: {}, f: {}", t, f);
+}</code></pre></pre>
+<p>Booleans are commonly used in conditional statements like <code>if</code> expressions.</p>
+<h3 id="character-type"><a class="header" href="#character-type">Character Type</a></h3>
+<p>Rust's <code>char</code> type represents a Unicode Scalar Value, which means it can represent more than just ASCII. Characters use single quotes, while strings use double quotes.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let c = 'z';
+    let z: char = 'ℤ'; // with explicit type annotation
+    let heart_eyed_cat = '😻';
+
+    println!("{}, {}, {}", c, z, heart_eyed_cat);
+}</code></pre></pre>
+<p>Rust's <code>char</code> type is four bytes in size, allowing it to represent a wide range of Unicode characters.</p>
+<h2 id="compound-types"><a class="header" href="#compound-types">Compound Types</a></h2>
+<p>Compound types can group multiple values into one type. Rust has two primitive compound types: tuples and arrays.</p>
+<h3 id="tuple-type"><a class="header" href="#tuple-type">Tuple Type</a></h3>
+<p>A tuple is a general way of grouping together a number of values with a variety of types into one compound type. Tuples have a fixed length: once declared, they cannot grow or shrink in size.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+
+    // Destructuring a tuple
+    let (x, y, z) = tup;
+    println!("The values are: {}, {}, {}", x, y, z);
+
+    // Accessing tuple elements with dot notation
+    let five_hundred = tup.0;
+    let six_point_four = tup.1;
+    let one = tup.2;
+
+    println!("Values by index: {}, {}, {}", five_hundred, six_point_four, one);
+}</code></pre></pre>
+<p>A tuple with no values <code>()</code> is called the unit type and represents an empty value or empty return type.</p>
+<h3 id="array-type"><a class="header" href="#array-type">Array Type</a></h3>
+<p>An array is a collection of multiple values of the same type. Unlike arrays in some languages, arrays in Rust have a fixed length.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    // With explicit type annotation [type; size]
+    let months: [&amp;str; 12] = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"];
+
+    // Creating an array with the same value repeated
+    let zeros = [0; 5]; // Creates [0, 0, 0, 0, 0]
+
+    // Accessing array elements
+    let first = a[0];
+    let second = a[1];
+
+    println!("First: {}, Second: {}", first, second);
+}</code></pre></pre>
+<p>Arrays are useful when you want your data allocated on the stack rather than the heap, or when you want to ensure you always have a fixed number of elements.</p>
+<h4 id="bounds-checking-in-arrays"><a class="header" href="#bounds-checking-in-arrays">Bounds Checking in Arrays</a></h4>
+<p>If you try to access an element at an index that doesn't exist, Rust will panic (crash with an error) at runtime:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    // This will compile but panic at runtime if the index is out of bounds
+    let index = 10;
+    let element = a[index]; // Will panic!
+
+    println!("The element is: {}", element);
+}</code></pre></pre>
+<p>This is a safety feature of Rust that prevents buffer overflows and other memory safety issues.</p>
+<h2 id="type-annotations"><a class="header" href="#type-annotations">Type Annotations</a></h2>
+<p>As mentioned earlier, Rust can usually infer the type of a variable, but sometimes we need to provide explicit type annotations. We do this by adding a colon followed by the type after the variable name:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let guess: u32 = "42".parse().expect("Not a number!");
+<span class="boring">}</span></code></pre></pre>
+<p>In this example, we're telling Rust that <code>guess</code> should be a <code>u32</code> (an unsigned 32-bit integer). Without this annotation, Rust wouldn't know which type to use for <code>parse()</code>.</p>
+<h2 id="custom-types"><a class="header" href="#custom-types">Custom Types</a></h2>
+<p>Beyond these built-in types, Rust allows you to define your own types using <code>struct</code> and <code>enum</code> declarations. We'll cover these in more detail in later chapters.</p>
+<p>Understanding Rust's type system is crucial for writing effective and safe Rust code. The compiler will help ensure you're using data correctly, preventing many common bugs before your program even runs.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="functions"><a class="header" href="#functions">Functions</a></h1>
+<p>Functions are the building blocks of readable, maintainable code. They allow us to break up our code into smaller pieces with specific purposes, making our programs easier to understand and modify. In this section, we'll explore how functions work in Rust.</p>
+<h2 id="defining-functions"><a class="header" href="#defining-functions">Defining Functions</a></h2>
+<p>We've already seen the most important function in Rust programs: the <code>main</code> function, which is the entry point of many programs. Defining a new function is straightforward:</p>
+<pre><pre class="playground"><code class="language-rust">fn another_function() {
+    println!("Another function.");
+}
+
+fn main() {
+    println!("Hello from main!");
+    another_function();
+}</code></pre></pre>
+<p>Function definitions in Rust start with <code>fn</code> and have a set of parentheses after the function name. The curly brackets tell the compiler where the function body begins and ends.</p>
+<p>We can call any function we've defined by entering its name followed by a set of parentheses. In the example above, we call <code>another_function()</code> from inside the <code>main</code> function.</p>
+<h2 id="function-parameters"><a class="header" href="#function-parameters">Function Parameters</a></h2>
+<p>Functions can take parameters, which are special variables that are part of a function's signature:</p>
+<pre><pre class="playground"><code class="language-rust">fn print_labeled_measurement(value: i32, unit_label: char) {
+    println!("The measurement is: {}{}", value, unit_label);
+}
+
+fn main() {
+    print_labeled_measurement(5, 'h');
+}</code></pre></pre>
+<p>In this function signature, <code>print_labeled_measurement</code> has two parameters: <code>value</code> of type <code>i32</code> and <code>unit_label</code> of type <code>char</code>. When we call the function, we pass in the values (arguments) <code>5</code> and <code>'h'</code>.</p>
+<p>Note that in Rust function signatures, you <strong>must</strong> declare the type of each parameter. This is a deliberate design decision to improve code clarity.</p>
+<h2 id="statements-and-expressions"><a class="header" href="#statements-and-expressions">Statements and Expressions</a></h2>
+<p>Understanding the difference between statements and expressions in Rust is important:</p>
+<ul>
+<li><strong>Statements</strong> are instructions that perform an action but do not return a value.</li>
+<li><strong>Expressions</strong> evaluate to a resulting value.</li>
+</ul>
+<p>Creating a variable and assigning a value to it with the <code>let</code> keyword is a statement:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let y = 6; // This is a statement
+}</code></pre></pre>
+<p>Function definitions are also statements. Statements do not return values, which is why the following code would not work:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = (let y = 6); // Error: let statements don't return values
+}</code></pre></pre>
+<p>Expressions evaluate to a value and can be part of statements. For example:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let y = {
+        let x = 3;
+        x + 1  // Note: no semicolon here!
+    };
+
+    println!("The value of y is: {}", y); // Prints 4
+}</code></pre></pre>
+<p>In this example, the block <code>{ let x = 3; x + 1 }</code> is an expression that evaluates to <code>4</code>. Note that the expression <code>x + 1</code> doesn't end with a semicolon. If we added a semicolon, it would become a statement and wouldn't return a value.</p>
+<h2 id="function-return-values"><a class="header" href="#function-return-values">Function Return Values</a></h2>
+<p>Functions can return values to the code that calls them. We don't name return values, but we do declare their type after an arrow (<code>-&gt;</code>):</p>
+<pre><pre class="playground"><code class="language-rust">fn five() -&gt; i32 {
+    5
+}
+
+fn main() {
+    let x = five();
+    println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>There are no function return keywords in the <code>five</code> function. Instead, we return the value by writing an expression without a semicolon at the end of the function. You can use the <code>return</code> keyword to return early from a function, but most functions return the last expression implicitly.</p>
+<p>Here's a more complex example that uses a condition to determine the return value:</p>
+<pre><pre class="playground"><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn main() {
+    let x = plus_one(5);
+    println!("The value of x is: {}", x);
+}</code></pre></pre>
+<p>Adding a semicolon to the end of an expression turns it into a statement, which doesn't return a value. If we changed our function to:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn plus_one(x: i32) -&gt; i32 {
+    x + 1;  // Error: doesn't return a value
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We would get a compile-time error because we're not returning a value, but we promised to return an <code>i32</code>.</p>
+<h2 id="multiple-return-values-using-tuples"><a class="header" href="#multiple-return-values-using-tuples">Multiple Return Values Using Tuples</a></h2>
+<p>While a function can only have one return type, we can use a tuple to return multiple values:</p>
+<pre><pre class="playground"><code class="language-rust">fn calculate_statistics(numbers: &amp;[i32]) -&gt; (i32, i32, i32) {
+    let sum: i32 = numbers.iter().sum();
+    let max: i32 = *numbers.iter().max().unwrap_or(&amp;0);
+    let min: i32 = *numbers.iter().min().unwrap_or(&amp;0);
+
+    (sum, max, min)
+}
+
+fn main() {
+    let numbers = [1, 5, 10, 2, 8];
+    let (sum, max, min) = calculate_statistics(&amp;numbers);
+
+    println!("Sum: {}, Max: {}, Min: {}", sum, max, min);
+}</code></pre></pre>
+<p>Here, our function returns a tuple containing the sum, maximum, and minimum values of an array.</p>
+<h2 id="function-pointers"><a class="header" href="#function-pointers">Function Pointers</a></h2>
+<p>Functions can be passed as arguments to other functions:</p>
+<pre><pre class="playground"><code class="language-rust">fn apply_twice(f: fn(i32) -&gt; i32, arg: i32) -&gt; i32 {
+    f(f(arg))
+}
+
+fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn main() {
+    let result = apply_twice(add_one, 5);
+    println!("Result: {}", result);  // Prints 7
+}</code></pre></pre>
+<p>In this example, <code>apply_twice</code> takes a function pointer <code>f</code> and an argument, then applies the function twice to the argument.</p>
+<h2 id="closures"><a class="header" href="#closures">Closures</a></h2>
+<p>Rust also supports closures, which are anonymous functions you can save in a variable or pass as arguments to other functions:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let add_one = |x| x + 1;
+    let result = add_one(5);
+    println!("Result: {}", result);  // Prints 6
+}</code></pre></pre>
+<p>Closures can capture their environment, allowing them to access variables from the scope in which they're defined:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 4;
+    let equal_to_x = |z| z == x;
+
+    let y = 4;
+    println!("{}", equal_to_x(y));  // Prints true
+}</code></pre></pre>
+<p>We'll cover closures in more detail in a later chapter.</p>
+<h2 id="function-best-practices"><a class="header" href="#function-best-practices">Function Best Practices</a></h2>
+<p>Here are some best practices for writing functions in Rust:</p>
+<ol>
+<li><strong>Keep functions small and focused</strong>: Each function should do one thing well.</li>
+<li><strong>Use descriptive names</strong>: Function names should clearly describe what they do.</li>
+<li><strong>Follow Rust's naming convention</strong>: Use snake_case for function names.</li>
+<li><strong>Document your functions</strong>: Use documentation comments <code>///</code> to explain what your function does.</li>
+<li><strong>Provide useful error messages</strong>: If your function can fail, make sure error messages are helpful.</li>
+</ol>
+<p>Functions are a fundamental part of Rust programming. As you continue your Rust journey, you'll learn more advanced ways to work with functions, including methods associated with types, closures, and higher-order functions.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="control-flow"><a class="header" href="#control-flow">Control Flow</a></h1>
+<p>Control flow refers to the order in which a program executes statements. Rust provides several control flow constructs that allow you to make decisions, repeat code, and handle different conditions. In this section, we'll explore if expressions, loops, and pattern matching with match.</p>
+<h2 id="if-expressions"><a class="header" href="#if-expressions">If Expressions</a></h2>
+<p>The <code>if</code> expression allows you to branch your code based on conditions. If the condition is true, a block of code is executed; if it's false, that block is skipped and an optional <code>else</code> block might be executed instead.</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let number = 7;
+
+    if number &lt; 5 {
+        println!("condition was true");
+    } else {
+        println!("condition was false");
+    }
+}</code></pre></pre>
+<p>The condition in an <code>if</code> expression must be a boolean. Unlike some languages, Rust will not automatically convert non-boolean types to a boolean:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let number = 3;
+
+    // This would cause an error
+    // if number {
+    //    println!("number was non-zero");
+    // }
+
+    // The correct way
+    if number != 0 {
+        println!("number was non-zero");
+    }
+}</code></pre></pre>
+<p>You can use multiple conditions with <code>else if</code>:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let number = 6;
+
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if number % 2 == 0 {
+        println!("number is divisible by 2");
+    } else {
+        println!("number is not divisible by 4, 3, or 2");
+    }
+}</code></pre></pre>
+<h3 id="using-if-in-a-let-statement"><a class="header" href="#using-if-in-a-let-statement">Using If in a Let Statement</a></h3>
+<p>Since <code>if</code> is an expression, we can use it on the right side of a <code>let</code> statement:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let condition = true;
+    let number = if condition { 5 } else { 6 };
+
+    println!("The value of number is: {}", number);
+}</code></pre></pre>
+<p>Remember that both arms of an <code>if</code> used in a <code>let</code> statement must return the same type:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let condition = true;
+
+    // This would cause a compile error
+    // let number = if condition { 5 } else { "six" };
+}</code></pre></pre>
+<h2 id="loops"><a class="header" href="#loops">Loops</a></h2>
+<p>Rust provides three kinds of loops: <code>loop</code>, <code>while</code>, and <code>for</code>.</p>
+<h3 id="the-loop-expression"><a class="header" href="#the-loop-expression">The Loop Expression</a></h3>
+<p>The <code>loop</code> keyword creates an infinite loop:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    loop {
+        println!("again!");
+
+        // This loop would run forever without a break
+        break;
+    }
+}</code></pre></pre>
+<p>We can use the <code>break</code> keyword to exit a loop and the <code>continue</code> keyword to skip the rest of the current iteration and start the next one.</p>
+<h4 id="returning-values-from-loops"><a class="header" href="#returning-values-from-loops">Returning Values from Loops</a></h4>
+<p>One useful feature of loops is that they can return values. To do this, add the value you want to return after the <code>break</code> expression:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    println!("The result is {}", result);  // Prints 20
+}</code></pre></pre>
+<h4 id="loop-labels"><a class="header" href="#loop-labels">Loop Labels</a></h4>
+<p>If you have nested loops, <code>break</code> and <code>continue</code> apply to the innermost loop. You can use loop labels to specify which loop a <code>break</code> or <code>continue</code> statement applies to:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    'outer: loop {
+        println!("Entered the outer loop");
+
+        loop {
+            println!("Entered the inner loop");
+
+            // This breaks the outer loop
+            break 'outer;
+        }
+
+        // This point is never reached
+        println!("This will never be printed");
+    }
+
+    println!("Exited the outer loop");
+}</code></pre></pre>
+<h3 id="while-loops"><a class="header" href="#while-loops">While Loops</a></h3>
+<p>A <code>while</code> loop performs a block of code as long as a condition remains true:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut number = 3;
+
+    while number != 0 {
+        println!("{}!", number);
+
+        number -= 1;
+    }
+
+    println!("LIFTOFF!!!");
+}</code></pre></pre>
+<p>This loop will print:</p>
+<pre><code>3!
+2!
+1!
+LIFTOFF!!!
+</code></pre>
+<p>While loops are clear when a condition is needed for the loop, but they can be slower than other loops because the compiler adds runtime code to check the condition on every iteration.</p>
+<h3 id="for-loops"><a class="header" href="#for-loops">For Loops</a></h3>
+<p>The <code>for</code> loop is used to iterate over elements of a collection:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = [10, 20, 30, 40, 50];
+
+    for element in a {
+        println!("the value is: {}", element);
+    }
+}</code></pre></pre>
+<p>This is the safest and most concise loop for iterating through a collection. You don't need to worry about going beyond array boundaries or missing elements.</p>
+<p>If you need to run code a specific number of times, you can use a range with a for loop:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Range 1..4 means 1, 2, 3 (excludes 4)
+    for number in 1..4 {
+        println!("{}!", number);
+    }
+    println!("LIFTOFF!!!");
+}</code></pre></pre>
+<p>To include the upper bound, use the inclusive range syntax:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for number in 1..=3 {
+    println!("{}!", number);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>For loops can also iterate in reverse using the <code>rev</code> method:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    for number in (1..4).rev() {
+        println!("{}!", number);
+    }
+    println!("LIFTOFF!!!");
+}</code></pre></pre>
+<p>This will print:</p>
+<pre><code>3!
+2!
+1!
+LIFTOFF!!!
+</code></pre>
+<h2 id="the-match-control-flow-operator"><a class="header" href="#the-match-control-flow-operator">The Match Control Flow Operator</a></h2>
+<p>Rust has an extremely powerful control flow operator called <code>match</code> that allows you to compare a value against a series of patterns and then execute code based on which pattern matches. Think of it as an advanced version of a switch statement from other languages.</p>
+<pre><pre class="playground"><code class="language-rust">enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter,
+}
+
+fn value_in_cents(coin: Coin) -&gt; u8 {
+    match coin {
+        Coin::Penny =&gt; 1,
+        Coin::Nickel =&gt; 5,
+        Coin::Dime =&gt; 10,
+        Coin::Quarter =&gt; 25,
+    }
+}
+
+fn main() {
+    let coin = Coin::Dime;
+    println!("A {:?} is worth {} cents", coin, value_in_cents(coin));
+}</code></pre></pre>
+<p><code>match</code> is exhaustive, meaning you must include all possible patterns. If you miss one, the compiler will let you know.</p>
+<h3 id="pattern-binding"><a class="header" href="#pattern-binding">Pattern Binding</a></h3>
+<p>You can bind values to names in match patterns:</p>
+<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+    // ... other states
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+
+fn value_in_cents(coin: Coin) -&gt; u8 {
+    match coin {
+        Coin::Penny =&gt; 1,
+        Coin::Nickel =&gt; 5,
+        Coin::Dime =&gt; 10,
+        Coin::Quarter(state) =&gt; {
+            println!("State quarter from {:?}!", state);
+            25
+        }
+    }
+}
+
+fn main() {
+    let coin = Coin::Quarter(UsState::Alaska);
+    println!("Value: {}", value_in_cents(coin));
+}</code></pre></pre>
+<h3 id="matching-with-option"><a class="header" href="#matching-with-option">Matching with Option<T></a></h3>
+<p><code>match</code> is particularly useful with the <code>Option&lt;T&gt;</code> enum:</p>
+<pre><pre class="playground"><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
+    match x {
+        None =&gt; None,
+        Some(i) =&gt; Some(i + 1),
+    }
+}
+
+fn main() {
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
+
+    println!("five: {:?}, six: {:?}, none: {:?}", five, six, none);
+}</code></pre></pre>
+<h3 id="catch-all-patterns-and-the-_-placeholder"><a class="header" href="#catch-all-patterns-and-the-_-placeholder">Catch-all Patterns and the _ Placeholder</a></h3>
+<p>If we want to take a special action for a few patterns but a default action for all others:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let dice_roll = 9;
+match dice_roll {
+    3 =&gt; add_fancy_hat(),
+    7 =&gt; remove_fancy_hat(),
+    _ =&gt; reroll(),  // The _ is a catch-all pattern
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We can also use the <code>_</code> placeholder when we don't care about the value:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>match dice_roll {
+    3 =&gt; add_fancy_hat(),
+    7 =&gt; remove_fancy_hat(),
+    _ =&gt; (), // Do nothing for all other values
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="if-let-syntax"><a class="header" href="#if-let-syntax">If Let Syntax</a></h2>
+<p>The <code>if let</code> syntax is a shorter way to handle values that match one pattern while ignoring the rest:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let some_value = Some(3);
+
+// Using match
+match some_value {
+    Some(3) =&gt; println!("three!"),
+    _ =&gt; (),
+}
+
+// Equivalent using if let
+if let Some(3) = some_value {
+    println!("three!");
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>if let</code> takes a pattern and an expression separated by an equals sign. It works the same way as a <code>match</code> where the expression is compared to the pattern.</p>
+<p>You can include an <code>else</code> with an <code>if let</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut count = 0;
+if let Coin::Quarter(state) = coin {
+    println!("State quarter from {:?}!", state);
+} else {
+    count += 1;
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="control-flow-summary"><a class="header" href="#control-flow-summary">Control Flow Summary</a></h2>
+<p>Rust's control flow constructs are powerful and expressive:</p>
+<ul>
+<li><strong>if expressions</strong> let you branch based on conditions</li>
+<li><strong>loops</strong> let you repeat code with <code>loop</code>, <code>while</code>, and <code>for</code></li>
+<li><strong>match expressions</strong> let you compare a value against patterns</li>
+<li><strong>if let</strong> provides a concise way to handle one pattern matching case</li>
+</ul>
+<p>These constructs are essential for writing Rust programs that can handle different conditions and process data in a variety of ways. As you become more comfortable with Rust, you'll find yourself combining these constructs in increasingly sophisticated ways.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="operators-and-expressions"><a class="header" href="#operators-and-expressions">Operators and Expressions</a></h1>
+<p>Rust provides a variety of operators that allow you to perform operations on values. In this section, we'll explore the most common operators in Rust and how they're used in expressions.</p>
+<h2 id="arithmetic-operators"><a class="header" href="#arithmetic-operators">Arithmetic Operators</a></h2>
+<p>Rust supports standard arithmetic operators for numeric types:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Addition
+    let sum = 5 + 10;
+
+    // Subtraction
+    let difference = 95.5 - 4.3;
+
+    // Multiplication
+    let product = 4 * 30;
+
+    // Division
+    let quotient = 56.7 / 32.2;
+    let truncated = -5 / 3; // Results in -1
+
+    // Remainder
+    let remainder = 43 % 5;
+
+    println!("Sum: {}", sum);
+    println!("Difference: {}", difference);
+    println!("Product: {}", product);
+    println!("Quotient: {}", quotient);
+    println!("Truncated: {}", truncated);
+    println!("Remainder: {}", remainder);
+}</code></pre></pre>
+<p>A few important notes about arithmetic in Rust:</p>
+<ul>
+<li>Integer division truncates toward zero</li>
+<li>The remainder operator <code>%</code> works with integer types only</li>
+<li>If you perform an operation that would cause integer overflow in debug mode, your program will panic (crash)</li>
+<li>In release mode, overflow wraps around (e.g., u8 value 255 + 1 becomes 0)</li>
+</ul>
+<h2 id="comparison-operators"><a class="header" href="#comparison-operators">Comparison Operators</a></h2>
+<p>Comparison operators compare two values and return a boolean:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let is_equal = 5 == 5;
+    let is_not_equal = 5 != 10;
+    let is_greater = 10 &gt; 5;
+    let is_less = 5 &lt; 10;
+    let is_greater_or_equal = 10 &gt;= 10;
+    let is_less_or_equal = 5 &lt;= 5;
+
+    println!("Equal: {}", is_equal);
+    println!("Not Equal: {}", is_not_equal);
+    println!("Greater: {}", is_greater);
+    println!("Less: {}", is_less);
+    println!("Greater or Equal: {}", is_greater_or_equal);
+    println!("Less or Equal: {}", is_less_or_equal);
+}</code></pre></pre>
+<p>Comparison operators are most commonly used in conditionals (<code>if</code> statements, <code>while</code> loops, etc.).</p>
+<h2 id="logical-operators"><a class="header" href="#logical-operators">Logical Operators</a></h2>
+<p>Logical operators work with boolean values:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let is_true = true;
+    let is_false = false;
+
+    // Logical AND
+    let logical_and = is_true &amp;&amp; is_false;
+
+    // Logical OR
+    let logical_or = is_true || is_false;
+
+    // Logical NOT
+    let logical_not = !is_true;
+
+    println!("AND: {}", logical_and);
+    println!("OR: {}", logical_or);
+    println!("NOT: {}", logical_not);
+}</code></pre></pre>
+<p>Logical operators are short-circuiting:</p>
+<ul>
+<li><code>&amp;&amp;</code> will only evaluate the right side if the left side is <code>true</code></li>
+<li><code>||</code> will only evaluate the right side if the left side is <code>false</code></li>
+</ul>
+<h2 id="bitwise-operators"><a class="header" href="#bitwise-operators">Bitwise Operators</a></h2>
+<p>Rust provides operators for bitwise manipulation:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a: u8 = 0b1010; // Binary representation of 10
+    let b: u8 = 0b1100; // Binary representation of 12
+
+    // Bitwise AND
+    let bitwise_and = a &amp; b;  // 0b1000 (8 in decimal)
+
+    // Bitwise OR
+    let bitwise_or = a | b;   // 0b1110 (14 in decimal)
+
+    // Bitwise XOR
+    let bitwise_xor = a ^ b;  // 0b0110 (6 in decimal)
+
+    // Bitwise NOT (inverts all bits)
+    let bitwise_not = !a;     // 0b11110101 (245 in decimal for a u8)
+
+    // Left shift
+    let left_shift = a &lt;&lt; 1;  // 0b10100 (20 in decimal)
+
+    // Right shift
+    let right_shift = a &gt;&gt; 1; // 0b0101 (5 in decimal)
+
+    println!("AND: {:08b} ({})", bitwise_and, bitwise_and);
+    println!("OR: {:08b} ({})", bitwise_or, bitwise_or);
+    println!("XOR: {:08b} ({})", bitwise_xor, bitwise_xor);
+    println!("NOT: {:08b} ({})", bitwise_not, bitwise_not);
+    println!("Left Shift: {:08b} ({})", left_shift, left_shift);
+    println!("Right Shift: {:08b} ({})", right_shift, right_shift);
+}</code></pre></pre>
+<p>Bitwise operators are useful for low-level programming, working with hardware, and implementing certain algorithms efficiently.</p>
+<h2 id="assignment-operators"><a class="header" href="#assignment-operators">Assignment Operators</a></h2>
+<p>The simplest assignment operator is <code>=</code>, which assigns a value to a variable:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 5;
+<span class="boring">}</span></code></pre></pre>
+<p>Rust also has compound assignment operators that combine operation and assignment:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut x = 5;
+
+    // Addition and assignment
+    x += 1;  // Equivalent to x = x + 1
+    println!("After +=: {}", x);
+
+    // Subtraction and assignment
+    x -= 2;  // Equivalent to x = x - 2
+    println!("After -=: {}", x);
+
+    // Multiplication and assignment
+    x *= 3;  // Equivalent to x = x * 3
+    println!("After *=: {}", x);
+
+    // Division and assignment
+    x /= 2;  // Equivalent to x = x / 2
+    println!("After /=: {}", x);
+
+    // Remainder and assignment
+    x %= 3;  // Equivalent to x = x % 3
+    println!("After %=: {}", x);
+
+    // Bitwise operations also have compound assignment versions
+    x &amp;= 2;  // Equivalent to x = x &amp; 2
+    println!("After &amp;=: {}", x);
+}</code></pre></pre>
+<p>Remember that the variable must be mutable (<code>mut</code>) to use compound assignment operators.</p>
+<h2 id="range-operators"><a class="header" href="#range-operators">Range Operators</a></h2>
+<p>Rust provides range operators for creating iterators over a range of values:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Exclusive range (does not include the upper bound)
+    for i in 1..5 {
+        print!("{} ", i);  // Prints "1 2 3 4 "
+    }
+    println!();
+
+    // Inclusive range (includes the upper bound)
+    for i in 1..=5 {
+        print!("{} ", i);  // Prints "1 2 3 4 5 "
+    }
+    println!();
+
+    // Ranges can be used with chars too
+    for c in 'a'..='e' {
+        print!("{} ", c);  // Prints "a b c d e "
+    }
+    println!();
+
+    // Creating a range without iterating it
+    let _range = 1..5;  // Can be used elsewhere, like in slice operations
+}</code></pre></pre>
+<p>Range operators are commonly used in <code>for</code> loops and slice operations.</p>
+<h2 id="the-dereference-and-borrow-operators"><a class="header" href="#the-dereference-and-borrow-operators">The Dereference and Borrow Operators</a></h2>
+<p>Rust has operators for working with references and pointers:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let x = 5;
+
+    // The borrow operator (&amp;) creates a reference
+    let y = &amp;x;
+
+    // The dereference operator (*) accesses the value a reference points to
+    println!("x: {}, y: {}, *y: {}", x, y, *y);
+
+    // Mutable borrowing
+    let mut z = 10;
+    let z_ref = &amp;mut z;
+    *z_ref += 5;
+
+    println!("z after modification: {}", z);
+}</code></pre></pre>
+<p>We'll cover references and borrowing in much more detail in the next chapter.</p>
+<h2 id="type-casting-operator"><a class="header" href="#type-casting-operator">Type Casting Operator</a></h2>
+<p>The <code>as</code> keyword is used for type casting in Rust:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let a = 15;       // i32 by default
+    let b = a as u8;  // Cast to u8
+    let c = a as f32; // Cast to f32
+
+    println!("a: {} ({})", a, type_of(&amp;a));
+    println!("b: {} ({})", b, type_of(&amp;b));
+    println!("c: {} ({})", c, type_of(&amp;c));
+
+    // Casting char to u8 gives its ASCII/Unicode code point
+    let d = 'A' as u8;
+    println!("ASCII value of 'A': {}", d);
+
+    // And vice versa
+    let e = 66 as char;
+    println!("Character with code point 66: {}", e);
+}
+
+// Helper function to get the type of a variable for demonstration
+fn type_of&lt;T&gt;(_: &amp;T) -&gt; String {
+    std::any::type_name::&lt;T&gt;().to_string()
+}</code></pre></pre>
+<p>Type casting in Rust is explicit. The compiler will not automatically cast types for you in most cases, helping prevent subtle bugs.</p>
+<h2 id="operator-precedence"><a class="header" href="#operator-precedence">Operator Precedence</a></h2>
+<p>Operators in Rust have different precedence levels, which determine the order of evaluation when multiple operators appear in an expression:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // Multiplication has higher precedence than addition
+    let result = 5 + 3 * 2;  // 3 * 2 is evaluated first, so result is 11
+    println!("5 + 3 * 2 = {}", result);
+
+    // Parentheses can be used to override precedence
+    let result = (5 + 3) * 2;  // 5 + 3 is evaluated first, so result is 16
+    println!("(5 + 3) * 2 = {}", result);
+}</code></pre></pre>
+<p>Here's a simplified precedence table (from highest to lowest):</p>
+<ol>
+<li>Method calls (<code>.</code>)</li>
+<li>Field access (<code>expr.field</code>)</li>
+<li>Function calls, array indexing (<code>foo()</code>, <code>arr[0]</code>)</li>
+<li>Unary operators (<code>!</code>, <code>-</code>, <code>*</code> dereference, <code>&amp;</code> borrow)</li>
+<li>Type cast (<code>as</code>)</li>
+<li>Multiplication, division, remainder (<code>*</code>, <code>/</code>, <code>%</code>)</li>
+<li>Addition, subtraction (<code>+</code>, <code>-</code>)</li>
+<li>Shift (<code>&lt;&lt;</code>, <code>&gt;&gt;</code>)</li>
+<li>Bitwise AND (<code>&amp;</code>)</li>
+<li>Bitwise XOR (<code>^</code>)</li>
+<li>Bitwise OR (<code>|</code>)</li>
+<li>Comparisons (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>)</li>
+<li>Logical AND (<code>&amp;&amp;</code>)</li>
+<li>Logical OR (<code>||</code>)</li>
+<li>Range (<code>..</code>, <code>..=</code>)</li>
+<li>Assignment (<code>=</code>, <code>+=</code>, etc.)</li>
+</ol>
+<p>When in doubt, use parentheses to make your intentions clear.</p>
+<h2 id="expressions-and-statements"><a class="header" href="#expressions-and-statements">Expressions and Statements</a></h2>
+<p>As we mentioned in the Functions section, Rust is an expression-based language. Most constructs in Rust are expressions that evaluate to a value.</p>
+<p>Even control flow constructs like <code>if</code> and <code>match</code> are expressions:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let condition = true;
+
+    // if as an expression
+    let number = if condition { 5 } else { 6 };
+    println!("The value of number is: {}", number);
+
+    // match as an expression
+    let x = 1;
+    let message = match x {
+        0 =&gt; "zero",
+        1 =&gt; "one",
+        2 =&gt; "two",
+        _ =&gt; "many",
+    };
+    println!("The message is: {}", message);
+
+    // Block expressions
+    let y = {
+        let inner = 2;
+        inner * inner + 1  // Note: no semicolon means this is the return value
+    };
+    println!("The value of y is: {}", y);
+}</code></pre></pre>
+<p>Understanding that nearly everything in Rust is an expression helps write more concise and expressive code.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Operators and expressions are fundamental building blocks of Rust programming. They allow you to manipulate values in a variety of ways and combine simple expressions into complex ones. Rust's expression-oriented nature and explicit type handling make the language both powerful and predictable, helping prevent common programming errors.</p>
+<p>As you continue with Rust, you'll discover more advanced ways to combine operators and expressions to solve complex problems efficiently.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="comments-and-documentation"><a class="header" href="#comments-and-documentation">Comments and Documentation</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>Well-written comments and documentation are essential for making your code understandable to others (and to your future self). Rust has a rich system for both regular comments and documentation comments that can generate beautiful HTML documentation. In this section, we'll explore how to effectively comment and document your Rust code.</p>
+<h2 id="regular-comments"><a class="header" href="#regular-comments">Regular Comments</a></h2>
+<p>Rust supports two types of regular comments:</p>
+<h3 id="line-comments"><a class="header" href="#line-comments">Line Comments</a></h3>
+<p>Line comments start with <code>//</code> and continue until the end of the line:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    // This is a line comment
+    let x = 5; // This comment follows a statement
+
+    // Comments can span multiple lines
+    // like this
+
+    let y = 10; // Comments can explain what variables are for
+}</code></pre></pre>
+<p>Line comments are great for short explanations or notes about specific parts of your code.</p>
+<h3 id="block-comments"><a class="header" href="#block-comments">Block Comments</a></h3>
+<p>Block comments start with <code>/*</code> and end with <code>*/</code>, and can span multiple lines:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    /* This is a
+       block comment */
+
+    let complicated_calculation = /* even comments in the middle of a line */ 5;
+
+    /*
+     * Some developers like to format block comments
+     * with a * at the beginning of each line
+     * for readability.
+     */
+}</code></pre></pre>
+<p>Block comments are less common in Rust than line comments but can be useful for temporarily commenting out blocks of code during development.</p>
+<h2 id="documentation-comments-1"><a class="header" href="#documentation-comments-1">Documentation Comments</a></h2>
+<p>Rust has a special kind of comment for documentation that can be processed by the <code>rustdoc</code> tool to generate HTML documentation. There are two types of documentation comments:</p>
+<h3 id="documentation-line-comments"><a class="header" href="#documentation-line-comments">Documentation Line Comments</a></h3>
+<p>Documentation line comments start with <code>///</code> and apply to the item that follows them:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Adds one to the provided number.
+///
+/// # Examples
+///
+/// ```
+/// let five = 5;
+/// let six = add_one(five);
+/// assert_eq!(6, six);
+/// ```
+fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="documentation-block-comments"><a class="header" href="#documentation-block-comments">Documentation Block Comments</a></h3>
+<p>Documentation block comments start with <code>/**</code> (except the opening <code>/*</code>) and end with <code>*/</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/**
+ * Multiplies the input by two.
+ *
+ * # Examples
+ *
+ * ```
+ * let four = 4;
+ * let eight = double(four);
+ * assert_eq!(8, eight);
+ * ```
+ */
+fn double(x: i32) -&gt; i32 {
+    x * 2
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Documentation block comments are less common in Rust code than documentation line comments.</p>
+<h3 id="inner-documentation-comments"><a class="header" href="#inner-documentation-comments">Inner Documentation Comments</a></h3>
+<p>Inner documentation comments start with <code>//!</code> or <code>/*!</code> and apply to the item that contains them, rather than the item that follows them. They're often used at the beginning of modules or crates to document the module/crate as a whole:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//! # My Awesome Crate
+//!
+//! This crate provides functionality for doing awesome things.
+//!
+//! Use it when you need to be awesome.
+
+/// An awesome function in an awesome crate.
+pub fn be_awesome() {
+    println!("Awesome!");
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="markdown-in-documentation-comments"><a class="header" href="#markdown-in-documentation-comments">Markdown in Documentation Comments</a></h2>
+<p>Documentation comments support Markdown formatting, allowing you to create rich documentation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// # Calculator Function
+///
+/// Performs basic arithmetic operations.
+///
+/// ## Arguments
+///
+/// * `a` - The first operand
+/// * `b` - The second operand
+/// * `op` - The operation to perform: '+', '-', '*', or '/'
+///
+/// ## Returns
+///
+/// The result of the operation, or `None` if division by zero or invalid operation
+///
+/// ## Examples
+///
+/// ```
+/// let result = calculate(10, 5, '+');
+/// assert_eq!(result, Some(15));
+/// ```
+///
+/// ## Panics
+///
+/// This function doesn't panic.
+///
+/// ## Errors
+///
+/// Returns `None` for invalid operations or division by zero.
+fn calculate(a: i32, b: i32, op: char) -&gt; Option&lt;i32&gt; {
+    match op {
+        '+' =&gt; Some(a + b),
+        '-' =&gt; Some(a - b),
+        '*' =&gt; Some(a * b),
+        '/' =&gt; if b != 0 { Some(a / b) } else { None },
+        _ =&gt; None,
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="common-markdown-sections"><a class="header" href="#common-markdown-sections">Common Markdown Sections</a></h3>
+<p>Some common sections in Rust documentation include:</p>
+<ul>
+<li><code># Examples</code>: Code examples showing how to use the item</li>
+<li><code># Panics</code>: Explains scenarios where the function might panic</li>
+<li><code># Errors</code>: Describes the possible error types a function may return</li>
+<li><code># Safety</code>: For unsafe functions, explains the invariants that the caller must uphold</li>
+<li><code># Arguments</code> or <code># Parameters</code>: Details about the function parameters</li>
+<li><code># Returns</code>: Information about the return value</li>
+</ul>
+<h2 id="code-examples-in-documentation"><a class="header" href="#code-examples-in-documentation">Code Examples in Documentation</a></h2>
+<p>One of the most useful features of Rust's documentation system is the ability to include code examples that can be verified by running <code>cargo test</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Returns the square of the input.
+///
+/// # Examples
+///
+/// ```
+/// let x = 4;
+/// let result = square(x);
+/// assert_eq!(result, 16);
+/// ```
+///
+/// ```
+/// // Zero squared is still zero
+/// assert_eq!(square(0), 0);
+/// ```
+fn square(x: i32) -&gt; i32 {
+    x * x
+}
+<span class="boring">}</span></code></pre></pre>
+<p>When you run <code>cargo test</code>, Rust will compile and run the code examples in your documentation to ensure they work correctly.</p>
+<h2 id="generating-documentation"><a class="header" href="#generating-documentation">Generating Documentation</a></h2>
+<p>To generate HTML documentation for your crate, you can use:</p>
+<pre><code class="language-bash">cargo doc
+</code></pre>
+<p>This will build the documentation for your crate and all its dependencies. To only build documentation for your crate:</p>
+<pre><code class="language-bash">cargo doc --no-deps
+</code></pre>
+<p>To open the documentation in your browser after building:</p>
+<pre><code class="language-bash">cargo doc --open
+</code></pre>
+<h2 id="documentation-best-practices"><a class="header" href="#documentation-best-practices">Documentation Best Practices</a></h2>
+<p>Here are some tips for writing effective documentation in Rust:</p>
+<ol>
+<li><strong>Document all public items</strong>: Every public function, struct, trait, etc., should have documentation</li>
+<li><strong>Include examples</strong>: Code examples are the most helpful form of documentation</li>
+<li><strong>Explain the why, not just the what</strong>: Good documentation explains the purpose and use cases</li>
+<li><strong>Keep it consistent</strong>: Use a consistent style throughout your documentation</li>
+<li><strong>Link to related items</strong>: Use <code>[link_text]</code> syntax to link to other items in your crate</li>
+<li><strong>Use proper Markdown headers</strong>: Structure your documentation with headers for better readability</li>
+<li><strong>Document error cases and panics</strong>: Clearly explain when functions might fail</li>
+<li><strong>Keep examples simple</strong>: Examples should be easy to understand and demonstrate typical usage</li>
+</ol>
+<h2 id="using-comments-for-temporary-todos"><a class="header" href="#using-comments-for-temporary-todos">Using Comments for Temporary TODOs</a></h2>
+<p>It's common to use comments to mark areas of code that need further attention:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn process_data(data: &amp;[u32]) -&gt; u32 {
+    // TODO: Optimize this algorithm for large data sets
+    data.iter().sum()
+}
+
+fn handle_error(error_code: i32) {
+    // FIXME: Implement proper error handling
+    println!("An error occurred: {}", error_code);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Some development environments recognize markers like <code>TODO:</code> and <code>FIXME:</code> and provide special highlighting or listing features for them.</p>
+<h2 id="the-doc-attribute"><a class="header" href="#the-doc-attribute">The #[doc] Attribute</a></h2>
+<p>You can also use the <code>#[doc]</code> attribute to add documentation to items:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[doc = "Adds two numbers together."]
+fn add(a: i32, b: i32) -&gt; i32 {
+    a + b
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This is equivalent to using <code>///</code> comments, but is sometimes used in macros or generated code.</p>
+<h2 id="conclusion-1"><a class="header" href="#conclusion-1">Conclusion</a></h2>
+<p>Good documentation is crucial for making your code accessible to others. Rust's documentation system is powerful and well-integrated with the language, allowing you to create comprehensive and verifiable documentation that aids users of your code.</p>
+<p>By using a combination of regular comments for internal notes and documentation comments for public interfaces, you can create code that is both maintainable and user-friendly.</p>
+<p>When you start writing Rust libraries or contributing to Rust projects, take the time to write quality documentation. Your users (and your future self) will thank you!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-2-summary"><a class="header" href="#chapter-2-summary">Chapter 2 Summary</a></h1>
+<p>In this chapter, we've explored the fundamental building blocks of Rust programming. Let's summarize what we've learned:</p>
+<h2 id="key-concepts-1"><a class="header" href="#key-concepts-1">Key Concepts</a></h2>
+<h3 id="variables-and-mutability-1"><a class="header" href="#variables-and-mutability-1">Variables and Mutability</a></h3>
+<ul>
+<li>Variables in Rust are immutable by default</li>
+<li>Use the <code>mut</code> keyword to make variables mutable</li>
+<li>Constants are always immutable and declared with <code>const</code></li>
+<li>Shadowing allows reusing variable names for different values or types</li>
+</ul>
+<h3 id="data-types-1"><a class="header" href="#data-types-1">Data Types</a></h3>
+<ul>
+<li>Scalar types include integers, floating-point numbers, booleans, and characters</li>
+<li>Compound types include tuples and arrays</li>
+<li>Rust is statically typed, meaning all variable types must be known at compile time</li>
+<li>Type annotations are required when the compiler can't infer the type</li>
+</ul>
+<h3 id="functions-1"><a class="header" href="#functions-1">Functions</a></h3>
+<ul>
+<li>Functions are defined with the <code>fn</code> keyword followed by a name and parameters</li>
+<li>Function parameters must have type annotations</li>
+<li>Return values are specified with an arrow <code>-&gt;</code> followed by the type</li>
+<li>Expressions (without a semicolon) return values</li>
+<li>Statements (with a semicolon) do not return values</li>
+</ul>
+<h3 id="control-flow-1"><a class="header" href="#control-flow-1">Control Flow</a></h3>
+<ul>
+<li><code>if</code> expressions allow branching based on conditions</li>
+<li><code>loop</code>, <code>while</code>, and <code>for</code> constructs allow for repetition</li>
+<li>The <code>match</code> expression provides powerful pattern matching</li>
+<li><code>if let</code> provides a concise way to handle a single pattern match case</li>
+</ul>
+<h3 id="operators-and-expressions-1"><a class="header" href="#operators-and-expressions-1">Operators and Expressions</a></h3>
+<ul>
+<li>Rust provides standard arithmetic, comparison, and logical operators</li>
+<li>Bitwise operators allow manipulation at the bit level</li>
+<li>The <code>as</code> keyword enables explicit type casting</li>
+<li>Most constructs in Rust are expressions that return values</li>
+</ul>
+<h3 id="comments-and-documentation-1"><a class="header" href="#comments-and-documentation-1">Comments and Documentation</a></h3>
+<ul>
+<li>Regular comments use <code>//</code> for line comments and <code>/* */</code> for block comments</li>
+<li>Documentation comments use <code>///</code> for items and <code>//!</code> for modules/crates</li>
+<li>Documentation supports Markdown formatting</li>
+<li>Code examples in documentation can be tested with <code>cargo test</code></li>
+</ul>
+<h2 id="whats-next-1"><a class="header" href="#whats-next-1">What's Next?</a></h2>
+<p>Now that we've covered the basic syntax and features of Rust, we're ready to dive into one of Rust's most distinctive and powerful features: its ownership system.</p>
+<p>In the next chapter, we'll explore ownership, borrowing, references, and slices. These concepts are at the heart of Rust's memory safety guarantees and are what make Rust unique among programming languages.</p>
+<h2 id="exercises-1"><a class="header" href="#exercises-1">Exercises</a></h2>
+<p>To reinforce what you've learned in this chapter, try these exercises:</p>
+<ol>
+<li>
+<p><strong>Temperature Converter</strong>: Write a function that converts between Fahrenheit and Celsius temperatures.</p>
+</li>
+<li>
+<p><strong>Fibonacci Generator</strong>: Create a program that prints the first n numbers in the Fibonacci sequence.</p>
+</li>
+<li>
+<p><strong>FizzBuzz</strong>: Implement the classic FizzBuzz program: print numbers from 1 to 100, but for multiples of 3 print "Fizz" instead, for multiples of 5 print "Buzz", and for multiples of both 3 and 5 print "FizzBuzz".</p>
+</li>
+<li>
+<p><strong>String Manipulator</strong>: Write a program that takes a string and returns it with the words reversed. For example, "Hello World" would become "World Hello".</p>
+</li>
+<li>
+<p><strong>Documentation Practice</strong>: Take one of your previous exercises and add comprehensive documentation comments to it, including examples, parameter descriptions, and return value information.</p>
+</li>
+</ol>
+<p>Remember to use the concepts we've covered in this chapter, such as variables, functions, control flow, and documentation. Don't worry if you find some of these challenging—practice is the best way to solidify your understanding.</p>
+<h2 id="resources-for-further-learning-1"><a class="header" href="#resources-for-further-learning-1">Resources for Further Learning</a></h2>
+<p>If you want to dive deeper into the topics covered in this chapter, check out:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/book/ch03-00-common-programming-concepts.html">The Rust Programming Language Book, Chapters 3-4</a></li>
+<li><a href="https://doc.rust-lang.org/rust-by-example/index.html">Rust By Example, Chapters 1-5</a></li>
+<li><a href="https://github.com/rust-lang/rustlings">Rustlings Exercises</a> - Interactive exercises to practice Rust fundamentals</li>
+</ul>
+<p>Keep practicing, and you'll soon be ready for the next step in your Rust journey!</p>
 
                     </main>
 
